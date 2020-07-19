@@ -1,0 +1,10 @@
+Short Description / Microservice name / Website
+
+Domain Name Registrar - Namecheap - https://www.namecheap.com/
+Virtual Cloud Services - Digital Ocean - https://www.digitalocean.com/
+NoSQL Cloud Database - Firebase - https://firebase.google.com/
+Payment Gateway - Adyen - https://www.adyen.com/
+Payment Gateway - Stripe - https://stripe.com/en-sg
+SMS and Communication Services - Vonage(Previously known as Nexmo) - https://dashboard.nexmo.com/sign-in
+Customer Support Chat Platform - Freshchat - https://www.freshworks.com/live-chat-software/
+

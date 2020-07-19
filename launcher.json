@@ -1,0 +1,14 @@
+{
+    "apps" : [
+        {
+          "script":"app.js",
+          "node_args":"--max_old_space_size=5000",
+          "instances" : 3,
+          "trace":true,
+          "exec_mode" : "cluster",
+          "env": {
+            "NODE_ENV": "production"
+          }
+        }
+    ]
+}

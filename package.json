@@ -1,0 +1,35 @@
+{
+  "name": "telepod-main-client",
+  "version": "1.0.0",
+  "description": "Tehpod Realm",
+  "main": "app.js",
+  "scripts": {
+    "start": "pm2 start mainapp.json",
+    "test": "pm2 start mainapptest.json"
+  },
+  "author": "Ilmi.W",
+  "license": "ISC",
+  "dependencies": {
+    "@adyen/api-library": "^2.2.1",
+    "country-iso": "^2.0.5",
+    "express": "^4.16.3",
+    "express-session": "^1.15.6",
+    "express-slow-down": "^1.0.1",
+    "firebase-admin": "^6.0.0",
+    "geofire": "^4.1.2",
+    "geolib": "^2.0.24",
+    "jsonwebtoken": "^8.4.0",
+    "keygenerator": "^1.0.4",
+    "locks": "^0.2.2",
+    "nexmo": "^2.3.2",
+    "node-schedule": "^1.3.0",
+    "nodemailer": "^6.0.0",
+    "pm2": "^3.0.4",
+    "q": "^1.5.1",
+    "request-json": "^0.6.3",
+    "short-uuid": "^3.1.0",
+    "uuid": "^3.3.2",
+    "winston": "^3.1.0",
+    "winston-daily-rotate-file": "^3.3.2"
+  }
+}
