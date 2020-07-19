@@ -1,0 +1,1905 @@
+{
+	"info": {
+		"_postman_id": "745fe31a-a8b9-43d4-ab55-067e69318f71",
+		"name": "Telepod Mobile Main Client APIs",
+		"description": "This is a set of Telepod Main Client Mobile APIs",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "v1.0",
+			"item": [
+				{
+					"name": "getAllStations",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-access-token",
+								"value": "{{CLIENT_TOKEN}}",
+								"description": "The \"ProjectGroups\" clientToken key.",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{HOST}}/{{API_VERSION}}/getAllStations",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"{{API_VERSION}}",
+								"getAllStations"
+							]
+						},
+						"description": "This fetches all stations object found in \"ProjectGroups\" ownership."
+					},
+					"response": [
+						{
+							"name": "getAllStations",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-access-token",
+										"value": "{{CLIENT_TOKEN}}",
+										"description": "The \"ProjectGroups\" clientToken key.",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{HOST}}/{{API_VERSION}}/getAllStations",
+									"host": [
+										"{{HOST}}"
+									],
+									"path": [
+										"{{API_VERSION}}",
+										"getAllStations"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Origin, X-Requested-With, Content-Type, Accept , X-Access-Token"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "576"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"240-0BKmSoYVXmvLS2eImz/zlee0mm4\""
+								},
+								{
+									"key": "Set-Cookie",
+									"value": "connect.sid=s%3AZPzJbW121YlDqsHY-hipG2FqE680dIpE.8KNC%2FTGkbAFWCNukMrHPkpErDPCgClZKxAhYNLyei5A; Path=/; HttpOnly"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 16 Jul 2020 05:25:59 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"stationId\": \"DPT-MYJHB80990-01\",\n        \"batteryAvail\": 0,\n        \"dockingAvail\": 999,\n        \"geofenceRadiusM\": 200,\n        \"isBTStation\": false,\n        \"l\": [\n            1.563999,\n            103.633979\n        ],\n        \"scooterAvail\": 0,\n        \"scooterBatteryLow\": 0,\n        \"stationName\": \"Depot @ UTM\",\n        \"subStationName\": \"NIL\",\n        \"zoneId\": \"NIL\",\n        \"img\": []\n    },\n    {\n        \"stationId\": \"GreatTest\",\n        \"batteryAvail\": 10,\n        \"dockingAvail\": 0,\n        \"geofenceRadiusM\": 200,\n        \"isBTStation\": false,\n        \"l\": [\n            1.43556,\n            23.4324534\n        ],\n        \"scooterAvail\": 5,\n        \"scooterBatteryLow\": 0,\n        \"stationName\": \"TreatStation\",\n        \"subStationName\": \"NIL\",\n        \"zoneId\": \"Test-JPN\",\n        \"img\": [],\n        \"operatingHours\": [\n            [\n                -1,\n                -1\n            ],\n            [\n                -1,\n                -1\n            ],\n            [\n                -1,\n                -1\n            ],\n            [\n                -1,\n                -1\n            ],\n            [\n                -1,\n                -1\n            ],\n            [\n                -1,\n                -1\n            ],\n            [\n                -1,\n                -1\n            ]\n        ]\n    }\n]"
+						}
+					]
+				},
+				{
+					"name": "getOperatingZones",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"description": "The \"ProjectGroups\" clientToken key.",
+								"key": "x-access-token",
+								"type": "text",
+								"value": "{{CLIENT_TOKEN}}"
+							}
+						],
+						"url": {
+							"raw": "{{HOST}}/{{API_VERSION}}/getOperatingZones",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"{{API_VERSION}}",
+								"getOperatingZones"
+							]
+						},
+						"description": "This fetches all zones object found in \"ProjectGroups\" ownership."
+					},
+					"response": [
+						{
+							"name": "getOperatingZones",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "The \"ProjectGroups\" clientToken key.",
+										"key": "x-access-token",
+										"type": "text",
+										"value": "{{CLIENT_TOKEN}}"
+									}
+								],
+								"url": {
+									"raw": "{{HOST}}/{{API_VERSION}}/getOperatingZones",
+									"host": [
+										"{{HOST}}"
+									],
+									"path": [
+										"{{API_VERSION}}",
+										"getOperatingZones"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Origin, X-Requested-With, Content-Type, Accept , X-Access-Token"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "505"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"1f9-3C9cRe1IxMIq1ELCIMGU/UyAgiQ\""
+								},
+								{
+									"key": "Set-Cookie",
+									"value": "connect.sid=s%3Aqf85cTq9zOrxD6pgayL9vsYVciQ_xazS.DzHiN1gEjdBKySeBO3m1cyz7ZJyW8AswSoqU6UxDssY; Path=/; HttpOnly"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 16 Jul 2020 05:35:51 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"zoneId\": \"Test-JPN\",\n        \"hasBuzzer\": false,\n        \"isExclusive\": false,\n        \"isSuspended\": false,\n        \"l\": [\n            -1,\n            -1\n        ],\n        \"zoneBoundaries\": [\n            {\n                \"latitude\": 34.029520955639875,\n                \"longitude\": 136.2572479\n            },\n            {\n                \"latitude\": 35.88033442819879,\n                \"longitude\": 140.9786224\n            },\n            {\n                \"latitude\": 38.46828489542729,\n                \"longitude\": 136.1604309\n            }\n        ],\n        \"zoneColor\": \"#FF9F00\",\n        \"zoneDepositActive\": false,\n        \"zoneFare\": 23,\n        \"zoneUnlockFare\": 4232,\n        \"zoneName\": \"This IS Test Japan Zone\",\n        \"zoneRadius\": 300,\n        \"zoneTimeBlock\": 23000,\n        \"country\": \"JPN\",\n        \"currency\": \"JPY\",\n        \"lat\": 1.3397522,\n        \"lng\": 103.8228607\n    }\n]"
+						}
+					]
+				},
+				{
+					"name": "quickBook",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "e33fc08c-cdf0-4c13-ade5-c61917fdcc2c",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"description": "The \"ProjectGroups\" clientToken key.",
+								"key": "x-access-token",
+								"type": "text",
+								"value": "{{CLIENT_TOKEN}}"
+							}
+						],
+						"url": {
+							"raw": "{{HOST}}/{{API_VERSION}}/quickBook?userId&scooterId&stationId&userLat&userLng&paymentType=telepodCredit",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"{{API_VERSION}}",
+								"quickBook"
+							],
+							"query": [
+								{
+									"key": "userId",
+									"value": null,
+									"description": "Type is String"
+								},
+								{
+									"key": "scooterId",
+									"value": null,
+									"description": "Type is String"
+								},
+								{
+									"key": "stationId",
+									"value": null,
+									"description": "Type is String"
+								},
+								{
+									"key": "userLat",
+									"value": null,
+									"description": "Type is Double"
+								},
+								{
+									"key": "userLng",
+									"value": null,
+									"description": "Type is Double"
+								},
+								{
+									"key": "paymentType",
+									"value": "telepodCredit",
+									"description": "Type is String . \"creditCard\" or \"telepodCredit\" . Default value is \"telepodCredit\". Query parameter is optional."
+								}
+							]
+						},
+						"description": "The api allows booking of scooters."
+					},
+					"response": []
+				},
+				{
+					"name": "getAllPass",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "62a2d2a9-2aaa-4850-aa38-d51caa139a8f",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"description": "The \"ProjectGroups\" clientToken key.",
+								"key": "x-access-token",
+								"type": "text",
+								"value": "{{CLIENT_TOKEN}}"
+							}
+						],
+						"url": {
+							"raw": "{{HOST}}/{{API_VERSION}}/getAllPass?userId",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"{{API_VERSION}}",
+								"getAllPass"
+							],
+							"query": [
+								{
+									"key": "userId",
+									"value": null,
+									"description": "Type is String. Default value is \"NIL\". Query parameter is optional."
+								}
+							]
+						},
+						"description": "The api fetches all passes based on the \"country\" parameter found in user's object. If \"userId\" is not defined or \"NIL\", getAllPass returns all passes object from all country."
+					},
+					"response": []
+				},
+				{
+					"name": "getPassObj",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "846f3915-e607-4198-bd94-44ac31dd8847",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"description": "The \"ProjectGroups\" clientToken key.",
+								"key": "x-access-token",
+								"type": "text",
+								"value": "{{CLIENT_TOKEN}}"
+							}
+						],
+						"url": {
+							"raw": "{{HOST}}/{{API_VERSION}}/getAllPass?passId",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"{{API_VERSION}}",
+								"getAllPass"
+							],
+							"query": [
+								{
+									"key": "passId",
+									"value": null,
+									"description": "Type is String."
+								}
+							]
+						},
+						"description": "The api fetches specific pass object based on \"passId\"."
+					},
+					"response": []
+				},
+				{
+					"name": "getUserActivePass",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "249792dd-d8b2-4080-b784-568baed548b7",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"description": "The \"ProjectGroups\" clientToken key.",
+								"key": "x-access-token",
+								"type": "text",
+								"value": "{{CLIENT_TOKEN}}"
+							}
+						],
+						"url": {
+							"raw": "{{HOST}}/{{API_VERSION}}/checkActiveTrip?userId",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"{{API_VERSION}}",
+								"checkActiveTrip"
+							],
+							"query": [
+								{
+									"key": "userId",
+									"value": null,
+									"description": "Type is String."
+								}
+							]
+						},
+						"description": "The api fetches list of user's active pass objects."
+					},
+					"response": []
+				},
+				{
+					"name": "qrDocklessDropCheck",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7929aea1-32fe-4ac6-b987-56beec89fbee",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"description": "The \"ProjectGroups\" clientToken key.",
+								"key": "x-access-token",
+								"type": "text",
+								"value": "{{CLIENT_TOKEN}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"qrString\": ,\r\n    \"userId\": ,\r\n    \"tripId\": ,\r\n    \"userLat\": ,\r\n    \"userLng\":\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{HOST}}/{{API_VERSION}}/qrDocklessDropCheck",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"{{API_VERSION}}",
+								"qrDocklessDropCheck"
+							]
+						},
+						"description": "The api allows user to end their booking. Used in conjunction with \"checkActiveTrip\" API."
+					},
+					"response": []
+				},
+				{
+					"name": "tripCompleted",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "69e18686-267c-4329-8c7f-1c20e315e5b8",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"description": "The \"ProjectGroups\" clientToken key.",
+								"key": "x-access-token",
+								"type": "text",
+								"value": "{{CLIENT_TOKEN}}"
+							}
+						],
+						"url": {
+							"raw": "{{HOST}}/{{API_VERSION}}/checkActiveTrip?userId&tripId&rating&feedback",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"{{API_VERSION}}",
+								"checkActiveTrip"
+							],
+							"query": [
+								{
+									"key": "userId",
+									"value": null,
+									"description": "Type is String."
+								},
+								{
+									"key": "tripId",
+									"value": null,
+									"description": "Type is String."
+								},
+								{
+									"key": "rating",
+									"value": null,
+									"description": "Type is Integer."
+								},
+								{
+									"key": "feedback",
+									"value": null,
+									"description": "Type is String."
+								}
+							]
+						},
+						"description": "The api finishes user's trip booking. This API is the final step of user's booking flow."
+					},
+					"response": []
+				},
+				{
+					"name": "insertPromo",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "b9d6ca1b-93d7-4817-aa12-9ffb6c4ca374",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"description": "The \"ProjectGroups\" clientToken key.",
+								"key": "x-access-token",
+								"type": "text",
+								"value": "{{CLIENT_TOKEN}}"
+							}
+						],
+						"url": {
+							"raw": "{{HOST}}/{{API_VERSION}}/insertPromo?userId&promoId",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"{{API_VERSION}}",
+								"insertPromo"
+							],
+							"query": [
+								{
+									"key": "userId",
+									"value": null,
+									"description": "Type is String"
+								},
+								{
+									"key": "promoId",
+									"value": null,
+									"description": "Type is String"
+								}
+							]
+						},
+						"description": "The api allows users to redeem promo codes."
+					},
+					"response": []
+				},
+				{
+					"name": "checkActiveTrip",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "e385a2f0-9c5f-4075-be41-47bff6e64f52",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"description": "The \"ProjectGroups\" clientToken key.",
+								"key": "x-access-token",
+								"type": "text",
+								"value": "{{CLIENT_TOKEN}}"
+							}
+						],
+						"url": {
+							"raw": "{{HOST}}/{{API_VERSION}}/checkActiveTrip?userId",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"{{API_VERSION}}",
+								"checkActiveTrip"
+							],
+							"query": [
+								{
+									"key": "userId",
+									"value": null,
+									"description": "Type is String."
+								}
+							]
+						},
+						"description": "The api fetches user's most recent trips object."
+					},
+					"response": []
+				},
+				{
+					"name": "getCommon",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "328d5db7-78bf-41d2-9722-18c4af3de276",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"description": "The \"ProjectGroups\" clientToken key.",
+								"key": "x-access-token",
+								"type": "text",
+								"value": "{{CLIENT_TOKEN}}"
+							}
+						],
+						"url": {
+							"raw": "{{HOST}}/{{API_VERSION}}/getCommon?userLat&userLng",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"{{API_VERSION}}",
+								"getCommon"
+							],
+							"query": [
+								{
+									"key": "userLat",
+									"value": null,
+									"description": "Type is Double. Default value is \"-1\". Query parameter is optional."
+								},
+								{
+									"key": "userLng",
+									"value": null,
+									"description": "Type is Double. Default value is \"-1\". Query parameter is optional."
+								}
+							]
+						},
+						"description": "The api fetches country \"Common\" object based on user's location. If no country is found, fetches \"DEF\"(Default) \"Common\" object instead. \"Common\" objects are mobile app settings."
+					},
+					"response": []
+				},
+				{
+					"name": "setUserFCMToken",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "429e81e3-dfd1-4bf4-8032-21cc06e8a0ea",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"description": "The \"ProjectGroups\" clientToken key.",
+								"key": "x-access-token",
+								"type": "text",
+								"value": "{{CLIENT_TOKEN}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"FCMToken\": ,\r\n    \"userId\": \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{HOST}}/{{API_VERSION}}/setUserFCMToken",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"{{API_VERSION}}",
+								"setUserFCMToken"
+							]
+						},
+						"description": "The api set user's \"FCMToken\" parameter."
+					},
+					"response": []
+				},
+				{
+					"name": "getBestScooters",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "10d6b4f8-1e18-4047-9786-4c3b250d4143",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"description": "The \"ProjectGroups\" clientToken key.",
+								"key": "x-access-token",
+								"type": "text",
+								"value": "{{CLIENT_TOKEN}}"
+							}
+						],
+						"url": {
+							"raw": "{{HOST}}/{{API_VERSION}}/getBestScooters?qr&userId&userLat&userLng",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"{{API_VERSION}}",
+								"getBestScooters"
+							],
+							"query": [
+								{
+									"key": "qr",
+									"value": null,
+									"description": "Type is String"
+								},
+								{
+									"key": "userId",
+									"value": null,
+									"description": "Type is String"
+								},
+								{
+									"key": "userLat",
+									"value": null,
+									"description": "Type is Double. Default value is \"-1\". Query parameter is optional."
+								},
+								{
+									"key": "userLng",
+									"value": null,
+									"description": "Type is Double. Default value is \"-1\". Query parameter is optional."
+								}
+							]
+						},
+						"description": "The api fetches country \"Common\" object based on user's location. If no country is found, fetches \"DEF\"(Default) \"Common\" object instead. \"Common\" objects are mobile app settings."
+					},
+					"response": []
+				},
+				{
+					"name": "scooterReturned",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "e2291915-feb1-4fb1-addf-2005bd365cab",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"description": "The \"ProjectGroups\" clientToken key.",
+								"key": "x-access-token",
+								"type": "text",
+								"value": "{{CLIENT_TOKEN}}"
+							}
+						],
+						"url": {
+							"raw": "{{HOST}}/{{API_VERSION}}/scooterReturned?userId",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"{{API_VERSION}}",
+								"scooterReturned"
+							],
+							"query": [
+								{
+									"key": "userId",
+									"value": null,
+									"description": "Type is String"
+								}
+							]
+						},
+						"description": "The api compute \"totalDuration\" and \"totalFare\" for recent active trip."
+					},
+					"response": []
+				},
+				{
+					"name": "getUserTrips",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "e84a84c7-3b34-4235-bd2e-69735867e59e",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"description": "The \"ProjectGroups\" clientToken key.",
+								"key": "x-access-token",
+								"type": "text",
+								"value": "{{CLIENT_TOKEN}}"
+							}
+						],
+						"url": {
+							"raw": "{{HOST}}/{{API_VERSION}}/getUserTrips?userId&type&limit",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"{{API_VERSION}}",
+								"getUserTrips"
+							],
+							"query": [
+								{
+									"key": "userId",
+									"value": null,
+									"description": "Type is String"
+								},
+								{
+									"key": "type",
+									"value": null,
+									"description": "Type is String. POSSIBLE VALUES [\"CANCELLED\",\"EXPIRED\",\"TRIP_STARTED\",\"MULTI_TRIP_STARTED\",\"DROPOFF_RETURNED\",\"DROPOFF_COMPLETION\",\"COMPLETED\"]"
+								},
+								{
+									"key": "limit",
+									"value": null,
+									"description": "Type is Integer. Default value is \"100\". Query parameter is optional."
+								}
+							]
+						},
+						"description": "The api fetches user's \"Trip\" objects based on trip status \"type\"."
+					},
+					"response": []
+				},
+				{
+					"name": "sendRefund",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "637986c4-4975-4ddf-96ce-6d9de889dc74",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"description": "The \"ProjectGroups\" clientToken key.",
+								"key": "x-access-token",
+								"type": "text",
+								"value": "{{CLIENT_TOKEN}}"
+							}
+						],
+						"url": {
+							"raw": "{{HOST}}/{{API_VERSION}}/sendRefund?userId",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"{{API_VERSION}}",
+								"sendRefund"
+							],
+							"query": [
+								{
+									"key": "userId",
+									"value": null,
+									"description": "Type is String"
+								}
+							]
+						},
+						"description": "The api sets \"statusCode\" parameter of user's object for payment refund cron job."
+					},
+					"response": []
+				},
+				{
+					"name": "updateTripImageUrl",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "20588ff6-32fc-4623-b389-ac67c9e9de95",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"description": "The \"ProjectGroups\" clientToken key.",
+								"key": "x-access-token",
+								"type": "text",
+								"value": "{{CLIENT_TOKEN}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"imageURL\": ,\r\n    \"userId\": ,\r\n    \"tripId\":\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{HOST}}/{{API_VERSION}}/updateTripImageUrl",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"{{API_VERSION}}",
+								"updateTripImageUrl"
+							]
+						},
+						"description": "The api updates \"scooterImgURL\" in user's trip's object and returns \"totalDuration\",\"totalFare\" and \"creditBalance\"."
+					},
+					"response": []
+				},
+				{
+					"name": "getUserObj",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ca1d568a-d618-442f-a715-c974a74c14c8",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"description": "The \"ProjectGroups\" clientToken key.",
+								"key": "x-access-token",
+								"type": "text",
+								"value": "{{CLIENT_TOKEN}}"
+							}
+						],
+						"url": {
+							"raw": "{{HOST}}/{{API_VERSION}}/getUserObj?userId&contact&userLat&userLng",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"{{API_VERSION}}",
+								"getUserObj"
+							],
+							"query": [
+								{
+									"key": "userId",
+									"value": null,
+									"description": "Type is String"
+								},
+								{
+									"key": "contact",
+									"value": null,
+									"description": "Type is String. Query parameter is optional."
+								},
+								{
+									"key": "userLat",
+									"value": null,
+									"description": "Type is Double. Default value is \"-1\". Query parameter is optional."
+								},
+								{
+									"key": "userLng",
+									"value": null,
+									"description": "Type is Double. Default value is \"-1\". Query parameter is optional."
+								}
+							]
+						},
+						"description": "The api fetches user's object based on user's latitude and longitude."
+					},
+					"response": []
+				},
+				{
+					"name": "2FAReg",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "3f539845-e86c-4031-b44e-5b161b988eae",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"description": "The \"ProjectGroups\" clientToken key.",
+								"key": "x-access-token",
+								"type": "text",
+								"value": "{{CLIENT_TOKEN}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"number\": ,\r\n    \"country\":\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{HOST}}/{{API_VERSION}}/2FAReg",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"{{API_VERSION}}",
+								"2FAReg"
+							]
+						},
+						"description": "The api allows users to register/create/login new account via 2FA."
+					},
+					"response": []
+				},
+				{
+					"name": "2FAVer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c240aec7-0ab6-4313-a409-af1364936b9f",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"description": "The \"ProjectGroups\" clientToken key.",
+								"key": "x-access-token",
+								"type": "text",
+								"value": "{{CLIENT_TOKEN}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"pin\": ,\r\n    \"requestId\":\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{HOST}}/{{API_VERSION}}/2FAReg",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"{{API_VERSION}}",
+								"2FAReg"
+							]
+						},
+						"description": "The api allows users to authenticate the pincode received via 2FAReg."
+					},
+					"response": []
+				},
+				{
+					"name": "getUsersByNumber",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "f1c81407-46d1-4bfb-af61-83a9f3be65b0",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"description": "The \"ProjectGroups\" clientToken key.",
+								"key": "x-access-token",
+								"type": "text",
+								"value": "{{CLIENT_TOKEN}}"
+							}
+						],
+						"url": {
+							"raw": "{{HOST}}/{{API_VERSION}}/getUserObj?number",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"{{API_VERSION}}",
+								"getUserObj"
+							],
+							"query": [
+								{
+									"key": "number",
+									"value": null,
+									"description": "Type is String"
+								}
+							]
+						},
+						"description": "The api fetches user's object based on user's \"contact\" parameter."
+					},
+					"response": []
+				},
+				{
+					"name": "payAll",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ef0db478-2e93-485f-a89e-deb6060a3287",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"description": "The \"ProjectGroups\" clientToken key.",
+								"key": "x-access-token",
+								"type": "text",
+								"value": "{{CLIENT_TOKEN}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nonce\": ,\r\n    \"amount\":,\r\n    \"userId\":\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{HOST}}/{{API_VERSION}}/payAll",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"{{API_VERSION}}",
+								"payAll"
+							]
+						},
+						"description": "The api allows users to authenticate the pincode received via 2FAReg."
+					},
+					"response": []
+				},
+				{
+					"name": "buzzScooter",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "272f5c06-bd8c-4956-b9fe-581bde362fe7",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"description": "The \"ProjectGroups\" clientToken key.",
+								"key": "x-access-token",
+								"type": "text",
+								"value": "{{CLIENT_TOKEN}}"
+							}
+						],
+						"url": {
+							"raw": "{{HOST}}/{{API_VERSION}}/buzzScooter?scooterId",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"{{API_VERSION}}",
+								"buzzScooter"
+							],
+							"query": [
+								{
+									"key": "scooterId",
+									"value": null,
+									"description": "Type is String"
+								}
+							]
+						},
+						"description": "The api allows user to buzz scooter."
+					},
+					"response": []
+				},
+				{
+					"name": "swapScooter",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "b6bf518c-9e96-4eab-98ea-52a2f077dc43",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"description": "The \"ProjectGroups\" clientToken key.",
+								"key": "x-access-token",
+								"type": "text",
+								"value": "{{CLIENT_TOKEN}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userId\": ,\r\n    \"tripId\":,\r\n    \"scooterId\":\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{HOST}}/{{API_VERSION}}/payAll",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"{{API_VERSION}}",
+								"payAll"
+							]
+						},
+						"description": "The api allows users to swap existing \"In-Use\" scooter to another \"Available\" scooter"
+					},
+					"response": []
+				},
+				{
+					"name": "setUserProfile",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "9da9ea54-bc35-4a1a-9cb0-852528724abe",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"description": "The \"ProjectGroups\" clientToken key.",
+								"key": "x-access-token",
+								"type": "text",
+								"value": "{{CLIENT_TOKEN}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": ,\r\n    \"name\":,\r\n    \"userId\":\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{HOST}}/{{API_VERSION}}/setUserProfile",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"{{API_VERSION}}",
+								"setUserProfile"
+							]
+						},
+						"description": "The api allows users to change their \"email\" and \"name\" parameter in user object."
+					},
+					"response": []
+				},
+				{
+					"name": "lightOff",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "5441f96d-c17a-40f0-b293-a1fcffa7264c",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"description": "The \"ProjectGroups\" clientToken key.",
+								"key": "x-access-token",
+								"type": "text",
+								"value": "{{CLIENT_TOKEN}}"
+							}
+						],
+						"url": {
+							"raw": "{{HOST}}/{{API_VERSION}}/lightOff?scooterId&userId",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"{{API_VERSION}}",
+								"lightOff"
+							],
+							"query": [
+								{
+									"key": "scooterId",
+									"value": null,
+									"description": "Type is String"
+								},
+								{
+									"key": "userId",
+									"value": null,
+									"description": "Type is String"
+								}
+							]
+						},
+						"description": "The api allows user to switch off the scooter light. GEN 3 NBIOT ONLY!"
+					},
+					"response": []
+				},
+				{
+					"name": "lightOn",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "f7a28b0d-4659-4452-8c23-c0354a7de266",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"description": "The \"ProjectGroups\" clientToken key.",
+								"key": "x-access-token",
+								"type": "text",
+								"value": "{{CLIENT_TOKEN}}"
+							}
+						],
+						"url": {
+							"raw": "{{HOST}}/{{API_VERSION}}/lightOn?scooterId&userId",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"{{API_VERSION}}",
+								"lightOn"
+							],
+							"query": [
+								{
+									"key": "scooterId",
+									"value": null,
+									"description": "Type is String"
+								},
+								{
+									"key": "userId",
+									"value": null,
+									"description": "Type is String"
+								}
+							]
+						},
+						"description": "The api allows user to switch on the scooter light. GEN 3 NBIOT ONLY!"
+					},
+					"response": []
+				},
+				{
+					"name": "getScootersInStation",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "e9400dec-b232-4506-a115-1368337324da",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"description": "The \"ProjectGroups\" clientToken key.",
+								"key": "x-access-token",
+								"type": "text",
+								"value": "{{CLIENT_TOKEN}}"
+							}
+						],
+						"url": {
+							"raw": "{{HOST}}/{{API_VERSION}}/getScootersInStation?stationId&userId",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"{{API_VERSION}}",
+								"getScootersInStation"
+							],
+							"query": [
+								{
+									"key": "stationId",
+									"value": null,
+									"description": "Type is String"
+								},
+								{
+									"key": "userId",
+									"value": null,
+									"description": "Type is String"
+								}
+							]
+						},
+						"description": "The api fetches \"Available\" scooters based on given \"stationId\" parameter."
+					},
+					"response": []
+				},
+				{
+					"name": "checkUserReferral",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "294e6955-cf57-45d8-a570-a49793388c45",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"description": "The \"ProjectGroups\" clientToken key.",
+								"key": "x-access-token",
+								"type": "text",
+								"value": "{{CLIENT_TOKEN}}"
+							}
+						],
+						"url": {
+							"raw": "{{HOST}}/{{API_VERSION}}/checkUserReferral?userId&refId",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"{{API_VERSION}}",
+								"checkUserReferral"
+							],
+							"query": [
+								{
+									"key": "userId",
+									"value": null,
+									"description": "Type is String."
+								},
+								{
+									"key": "refId",
+									"value": null,
+									"description": "Type is String."
+								}
+							]
+						},
+						"description": "The api checks for referral and gives both referrer and referee \"credits\" if successful."
+					},
+					"response": []
+				},
+				{
+					"name": "unlockScooter",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "a569fb7b-f40d-44ba-9756-1c360edbb8df",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"description": "The \"ProjectGroups\" clientToken key.",
+								"key": "x-access-token",
+								"type": "text",
+								"value": "{{CLIENT_TOKEN}}"
+							}
+						],
+						"url": {
+							"raw": "{{HOST}}/{{API_VERSION}}/unlockScooter?userId&scooterId",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"{{API_VERSION}}",
+								"unlockScooter"
+							],
+							"query": [
+								{
+									"key": "userId",
+									"value": null,
+									"description": "Type is String."
+								},
+								{
+									"key": "scooterId",
+									"value": null,
+									"description": "Type is String."
+								}
+							]
+						},
+						"description": "The api allows user to unlock scooter."
+					},
+					"response": []
+				},
+				{
+					"name": "lockScooter",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "1c1605e4-5991-498d-a223-6039127631a7",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"description": "The \"ProjectGroups\" clientToken key.",
+								"key": "x-access-token",
+								"type": "text",
+								"value": "{{CLIENT_TOKEN}}"
+							}
+						],
+						"url": {
+							"raw": "{{HOST}}/{{API_VERSION}}/lockScooter?userId&scooterId",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"{{API_VERSION}}",
+								"lockScooter"
+							],
+							"query": [
+								{
+									"key": "userId",
+									"value": null,
+									"description": "Type is String."
+								},
+								{
+									"key": "scooterId",
+									"value": null,
+									"description": "Type is String."
+								}
+							]
+						},
+						"description": "The api allows user to lock scooter."
+					},
+					"response": []
+				},
+				{
+					"name": "convertUserDepositToCredit",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "92e436db-8dfb-4e2b-88fb-07871ccc2e19",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"description": "The \"ProjectGroups\" clientToken key.",
+								"key": "x-access-token",
+								"type": "text",
+								"value": "{{CLIENT_TOKEN}}"
+							}
+						],
+						"url": {
+							"raw": "{{HOST}}/{{API_VERSION}}/lockScooter?userId",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"{{API_VERSION}}",
+								"lockScooter"
+							],
+							"query": [
+								{
+									"key": "userId",
+									"value": null,
+									"description": "Type is String."
+								}
+							]
+						},
+						"description": "The api allows user to convert \"deposit\" into \"credits\""
+					},
+					"response": []
+				},
+				{
+					"name": "createScooterReport",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "5a72ca0b-9a20-4b06-a0bb-323e1f67e533",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"description": "The \"ProjectGroups\" clientToken key.",
+								"key": "x-access-token",
+								"type": "text",
+								"value": "{{CLIENT_TOKEN}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userId\": ,\r\n    \"scooterId\":,\r\n    \"locationUser\":,\r\n    \"message\":,\r\n    \"typeOfIssue\":\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{HOST}}/{{API_VERSION}}/createScooterReport",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"{{API_VERSION}}",
+								"createScooterReport"
+							]
+						},
+						"description": "The api allows users to report broken scooters."
+					},
+					"response": []
+				},
+				{
+					"name": "setRefundReasons",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "6d1da544-67cd-459d-97d0-b1ce7b0745fc",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"description": "The \"ProjectGroups\" clientToken key.",
+								"key": "x-access-token",
+								"type": "text",
+								"value": "{{CLIENT_TOKEN}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userId\": ,\r\n    \"reason\":,\r\n    \"reason1\":,\r\n    \"reason2\":\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{HOST}}/{{API_VERSION}}/setRefundReasons",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"{{API_VERSION}}",
+								"setRefundReasons"
+							]
+						},
+						"description": "The api allows users to set refund reasons."
+					},
+					"response": []
+				},
+				{
+					"name": "setRestoreId",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d5d8a7de-1ea6-4bd0-92c7-e04ada686ed3",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"description": "The \"ProjectGroups\" clientToken key.",
+								"key": "x-access-token",
+								"type": "text",
+								"value": "{{CLIENT_TOKEN}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userId\": ,\r\n    \"restoreId\":\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{HOST}}/{{API_VERSION}}/setRestoreId",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"{{API_VERSION}}",
+								"setRestoreId"
+							]
+						},
+						"description": "The api allows users to set restoreId"
+					},
+					"response": []
+				},
+				{
+					"name": "getUserTransactions",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "a50fe71c-e7af-4114-9097-cfee74810a0f",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"description": "The \"ProjectGroups\" clientToken key.",
+								"key": "x-access-token",
+								"type": "text",
+								"value": "{{CLIENT_TOKEN}}"
+							}
+						],
+						"url": {
+							"raw": "{{HOST}}/{{API_VERSION}}/getUserTransactions?userId&limit",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"{{API_VERSION}}",
+								"getUserTransactions"
+							],
+							"query": [
+								{
+									"key": "userId",
+									"value": null,
+									"description": "Type is String."
+								},
+								{
+									"key": "limit",
+									"value": null,
+									"description": "Type is Integer. Optional. Default value is 100"
+								}
+							]
+						},
+						"description": "The api allows user to convert \"deposit\" into \"credits\""
+					},
+					"response": []
+				}
+			],
+			"description": "Version 1.0 APIs",
+			"protocolProfileBehavior": {}
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "2ab60533-ef45-438d-91d8-b17278c50d95",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "05fa3b9f-3082-492b-9e0c-064f67df572f",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
