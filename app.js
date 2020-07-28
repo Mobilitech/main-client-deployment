@@ -50,14 +50,12 @@ function checkSessionToken(req, res, next)
       var _accountGroupsArr = dbUtil.getAccountGroups();
       if(token === "NIL")
       {
-        //throw(logger.logErrorReport("ERROR_MISSING_TOKEN","/1.7/CST@52",[]));
         logger.log("info",logger.logErrorReport("INFO","/1.0/CST@53",[token]));
         req.session.accountGroup = "NIL";
         next();
       }
       else if(_accountGroupsArr.find(p => p.clientToken == token) === undefined )
       {
-        //throw(logger.logErrorReport("ERROR_UNKNOWN_TOKEN","/1.7/CST@56",[]));
         logger.log("info",logger.logErrorReport("INFO","/1.0/CST@60",[token]));
         req.session.accountGroup = "NIL";
         next();
@@ -136,16 +134,13 @@ app.get('/v1.0/getUserObj',checkSessionToken,apiControllerV1_0.getUserOBJForFron
 app.post('/v1.0/2FAReg',checkSessionToken,apiControllerV1_0.twoFaReg);
 app.post('/v1.0/2FAVer',checkSessionToken,apiControllerV1_0.twoFaVer);
 app.get('/v1.0/getUsersByNumber',apiControllerV1_0.findNumberUserObj);
-// app.post('/v1.0/payAll',checkSessionToken,apiControllerV1_0.payAll);
 app.get('/v1.0/buzzScooter',checkSessionToken,apiControllerV1_0.buzzScooter);
 app.post('/v1.0/swapScooter',checkSessionToken,apiControllerV1_0.swapScooter);
 app.post('/v1.0/setUserProfile',checkSessionToken,apiControllerV1_0.setUserProfile);
 app.get('/v1.0/lightOff',checkSessionToken,apiControllerV1_0.lightOff);
 app.get('/v1.0/lightOn',checkSessionToken,apiControllerV1_0.lightOn);
 app.get('/v1.0/getScootersInStation',checkSessionToken,apiControllerV1_0.getScootersInStation);
-// app.get('/v1.0/checkIfLatLngInOperatingZones',checkSessionToken,apiControllerV1_0.checkIfLatLngInOperatingZonesFrontEnd);
 app.get('/v1.0/checkUserReferral',checkSessionToken,apiControllerV1_0.checkUserReferral);
-// app.get('/v1.0/getUserReceipt',checkSessionToken,apiControllerV1_0.getUserReceipt);
 app.get('/v1.0/unlockScooter',checkSessionToken,apiControllerV1_0.unlockScooter);
 app.get('/v1.0/lockScooter',checkSessionToken,apiControllerV1_0.lockScooter);
 app.get('/v1.0/convertUserDepositToCredit',checkSessionToken,apiControllerV1_0.convertUserDepositToCredit);
@@ -153,6 +148,12 @@ app.post('/v1.0/createScooterReport',checkSessionToken,apiControllerV1_0.createS
 app.post('/v1.0/setRefundReasons',checkSessionToken,apiControllerV1_0.setRefundReasons);
 app.post('/v1.0/setRestoreId',checkSessionToken,apiControllerV1_0.setRestoreId);
 app.get('/v1.0/getUserTransactions',checkSessionToken,apiControllerV1_0.getUserTransactions);
+
+//version 1.0 STRIPE PAYMENTGATEWAY API
+app.get("/v1.0/stripe",checkSessionToken,apiControllerV1_0.getProjectPKey);
+app.delete("/v1.0/stripe",checkSessionToken,apiControllerV1_0.removeCC);
+app.post("/v1.0/stripe/authenticate",checkSessionToken,apiControllerV1_0.authenticatePaymentIntent);
+app.post("/v1.0/stripe/pay",checkSessionToken,apiControllerV1_0.createPaymentIntent);
 
 app.get('/version',checkSessionToken,function(req, res){
   res.json({"version":"v1.0.0"});

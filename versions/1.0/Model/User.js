@@ -2,7 +2,6 @@ class User
 {
   constructor()
   {
-    this.userId = "NIL";
     this.authenticated = false;
     this.contact = "NIL"; //originally int, now string
     this.countryCode = "NIL"; // originally int -1, now string

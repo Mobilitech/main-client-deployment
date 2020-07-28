@@ -156,42 +156,6 @@ exports.openVibration = function(scooterId)
     return deferred.promise;
 };
 
-/* exports.requestInvoiceURL = function(_userId,_transactionId)
-{
-  var deferred = Q.defer();
-  var timeout = setTimeout(function() {
-    logger.log("info",logger.logErrorReport("ERROR_TIMEOUT","/1.0/requestInvoiceURL@156",["NIL"]));
-    deferred.reject();
-  }, 10000);
-
-  try {
-    var client = request.createClient(telepodDetails.invoiceDomain);
-
-    client.get('invoice?userId=' + _userId + "&transactionId=" + _transactionId).then(function(objreply){
-      clearTimeout(timeout);
-      if(objreply.res.statusCode >= 300)
-      {
-        deferred.reject();
-      }
-      else if (objreply.res.statusCode < 300 && objreply.res.statusCode >= 200){
-        deferred.resolve(objreply.body);
-      }
-      else {
-        deferred.reject();
-      }
-    }).catch(function(error){
-      clearTimeout(timeout);
-      throw(logger.logErrorReport("ERROR","/1.0/requestInvoiceURL@168",[error]));
-    });
-  } catch (e) {
-    clearTimeout(timeout);
-    logger.log("error",logger.logErrorReport("ERROR","/1.0/requestInvoiceURL@172",[e]));
-    deferred.reject();
-  }
-
-  return deferred.promise;
-}
- */
 exports.gpsLightOff = function(scooterId) //GEN 3
 {
   const deferred = Q.defer();

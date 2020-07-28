@@ -2,7 +2,6 @@ class Transaction
 {
   constructor()
   {
-    this.transactionId = "NIL"
     this.creditCardNumber = "NIL";
     this.creditCardType = "NIL";
     this.creditCardToken = "NIL";

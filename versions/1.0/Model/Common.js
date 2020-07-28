@@ -35,6 +35,7 @@ class Common
     };
     this.pricingFare = 15;
     this.pricingTimeBlock = 60000;
+    this.pricingUnlockFare = 0;
     this.fb_link = "NIL";
     this.instagram_link = "NIL";
     this.youtube_link = "NIL";
@@ -42,6 +43,8 @@ class Common
     this.faq_link = "NIL";
     this.country = "NIL";
     this.currency = "NIL";
+    this.stripePublishKey = "NIL";
+    this.stripeSecretKey = "NIL";
   }
 };
 

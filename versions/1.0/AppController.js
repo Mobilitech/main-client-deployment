@@ -20,9 +20,16 @@ const tripModel = app_require('versions/1.0/Model/Trip.js');
 const projectGroupModel = app_require('versions/1.0/Model/ProjectGroup.js');
 const FCMOpsModel = app_require('versions/1.0/Model/FCMOperation.js');
 const ScooterReportModel = app_require('versions/1.0/Model/ScooterReport.js');
+const userModel = app_require('versions/1.0/Model/User.js');
+const commonModel = app_require('versions/1.0/Model/Common.js');
+const transactionModel = app_require('versions/1.0/Model/Transaction.js');
+const paymentIntentModel = app_require('versions/1.0/Model/PaymentIntent.js'); 
+const paymentMethodModel = app_require('versions/1.0/Model/PaymentMethod.js');
+const passModel = app_require('versions/1.0/Model/Pass.js');
 
 const nodemailer = require('nodemailer');
 const Nexmo = require('nexmo');
+
 const nexmo = new Nexmo({
   apiKey: telepodDetails.nexmoKey,
   apiSecret: telepodDetails.nexmoSecret
@@ -480,39 +487,6 @@ exports.getCommon = function(req, res)
       res,400,"https://ibb.co/k2zQzG");
   });
 }
-
-/* exports.adyenPayByLinkWebHook = function(req,res)
-{
-  console.log(req.headers);
-  console.log(req.body)
-  res.json("[accepted]");
-} */
-
-/* exports.createPayByLink = function(req,res)
-{
-  var client = request.createClient("https://checkout-test.adyen.com/");
-  client.headers['x-API-key'] = telepodDetails.adyenKey;
-  client.headers['Content-Type'] = "application/json";
-
-  var _newModel = new adyenPaymentModel();
-  Object.assign(_newModel,{
-    "reference":"TEST",
-    "amount":
-      {
-        "value":1234,
-        "currency":"SGD"
-      },
-    "merchantAccount":"TelepodPteLtd595ECOM",
-    "countryCode":"SG",
-    "shopperReference":"ILMI89",
-    "description":"HEWWW"
-  })
-  client.post('v51/paymentLinks',_newModel).then(function(result){
-    res.json(result.body);
-  }).catch(function(e){
-    res.json(e);
-  });
-} */
 
 exports.setUserFCMToken = function(req,res)
 {
@@ -1103,51 +1077,6 @@ exports.findNumberUserObj = function(req,res)
   });
 }
  */
-/* exports.payAll = function(req, res)
-{
-  var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-  var nonce = req.body.paymentNonce;
-  var amount = req.body.amount;
-  var userId = req.body.userId;
-  if(!nonce)
-  {
-    logger.catchFunc2(ip,"ERROR_MIS_PARM","/1.0/payAll@1164","Payment Error\n[PA1_0_1164]",
-      "There seems to be a problem in processing your request. Please try again",
-      res,400,"https://ibb.co/k2zQzG");
-    return;
-  }
-  if(!amount)
-  {
-    logger.catchFunc2(ip,"ERROR_MIS_PARM","/1.0/payAll@1171","Payment Error\n[PA1_0_1171]",
-      "There seems to be a problem in processing your request. Please try again",
-      res,400,"https://ibb.co/k2zQzG");
-    return;
-  }
-  if(!userId)
-  {
-    logger.catchFunc2(ip,"ERROR_MIS_PARM","/1.0/payAll@1178","Payment Error\n[PA1_0_1178]",
-      "There seems to be a problem in processing your request. Please try again",
-      res,400,"https://ibb.co/k2zQzG");
-    return;
-  }
-  const accountGroup = req.session.accountGroup === undefined ? "NIL" : req.session.accountGroup;
-  logger.logAPICall(ip,"/1.0/payAll@1184",[nonce,amount,userId,accountGroup],req.session.uid);
-  DBController.payAll(nonce,amount,userId,accountGroup).then(function(response){
-    res.json(response);
-  }).catch(function(error){
-    if((error.status !== undefined || error.status !== null) && error.status === "ERROR_MYS")
-    {
-      logger.catchFunc2(ip,"ERROR","/1.0/payAll@1190","Payment Error\n[PA1_0_1190]",
-        "There seems to be a problem in processing your request. Please try again",
-        res,400,"https://ibb.co/k2zQzG");
-    }
-    else {
-      logger.catchFunc2(ip,"ERROR","/1.0/payAll@1195","Payment Error\n[PA1_0_1195]",
-        "There seems to be a problem in processing your request. Please try again",
-        res,400,"https://ibb.co/k2zQzG");
-    }
-  });
-} */
 
 exports.buzzScooter = function(req, res)
 {
@@ -1234,7 +1163,6 @@ exports.swapScooter = function(req, res)
     return DBController.setScooterOBJ(_tripScooterId,{"status":"Available","lastStatusChange":_nowTime,"action":-1,
     "lastUser":_userId,"lastSubmitted" : -1,"lastImg" : "NIL"});
   }).then(function(){
-    logger.scooterLogging(_tripScooterId,"Available");
     return DBController.addTripQueue(_userId,_tripId,_scooterId,_foundScooterStationId,
       _foundScooterStationName,_foundScooterStationName,_tripStatus,_nowTime,accountGroup);
   }).then(function(){
@@ -1243,7 +1171,6 @@ exports.swapScooter = function(req, res)
     return DBController.setScooterOBJ(_scooterId,{"status":"InUse","lastStatusChange":_nowTime,"action":-1,
     "lastUser":_userId,"lastSubmitted" : -1,"lastImg" : "NIL"});
   }).then(function(){
-    logger.scooterLogging(_scooterId,"InUse");
     HardwareController.gpsHighRelayCommand(_scooterId);
     res.json({"status":"OK"});
   }).catch(function(err){
@@ -1390,41 +1317,6 @@ exports.getScootersInStation = function(req, res)
   });
 }
 
-/* exports.checkIfLatLngInOperatingZonesFrontEnd = function(req,res)
-{
-  var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-
-  if(!req.query.userLat){
-    logger.catchFunc2(ip,"ERROR_MIS_PARM","/1.0/checkIfLatLngInOperatingZones@1447","Error 1.0_1447",
-      "There seems to be an issue with your request.Contact Telepod customer support for more information.",
-      res,400,"https://ibb.co/k2zQzG");
-      return;
-  }
-
-  if(!req.query.userLng){
-    logger.catchFunc2(ip,"ERROR_MIS_PARM","/1.0/checkIfLatLngInOperatingZones@1454","Error 1.0_1454",
-      "There seems to be an issue with your request.Contact Telepod customer support for more information.",
-      res,400,"https://ibb.co/k2zQzG");
-      return;
-  }
-
-  var _userId = !req.query.userId ? "NIL" : req.query.userId;
-  var _lat = !isNaN(req.query.userLat) ? parseFloat(req.query.userLat) : -1;
-  var _lng = !isNaN(req.query.userLng) ? parseFloat(req.query.userLng) : -1;
-
-  var _countryFound = _lat == -1 || _lng == -1 || countryIso.get(_lat, _lng).length == 0 ? "SGP" : countryIso.get(_lat, _lng)[0];
-  const accountGroup = req.session.accountGroup === undefined ? "NIL" : req.session.accountGroup;
-  logger.logAPICall(ip,"/1.0/checkIfLatLngInOperatingZones@1466",[_lat,_lng,_userId,_countryFound,accountGroup],req.session.uid);
-  DBController.checkIfLatLngInOperatingZonesFrontEnd(_lat,_lng,_userId,_countryFound,accountGroup).then(function(data)
-  {
-    res.json(data);
-  }).catch(function(err){
-    logger.catchFunc2(ip,"ERROR","/1.0/checkIfLatLngInOperatingZones@1471","Error 1.0_1471",
-      "There seems to be an issue with your request.Contact Telepod customer support for more information.",
-      res,400,"https://ibb.co/k2zQzG");
-  });
-} */
-
 exports.checkUserReferral = function(req, res)
 {
   var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
@@ -1464,37 +1356,6 @@ exports.checkUserReferral = function(req, res)
       res,400,"https://ibb.co/k2zQzG");
   });
 }
-
-/* exports.getUserReceipt = function(req, res)
-{
-  var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-
-  if(!req.query.userId){
-    logger.catchFunc2(ip,"ERROR_MIS_PARM","/1.0/getUserReceipt@1522","Error 1.0_1522",
-      "There seems to be an issue with your request.Contact Telepod customer support for more information.",
-      res,400,"https://ibb.co/k2zQzG");
-      return;
-  }
-
-  if(!req.query.transactionId){
-    logger.catchFunc2(ip,"ERROR_MIS_PARM","/1.0/getUserReceipt@1529","Error 1.0_1529",
-      "There seems to be an issue with your request.Contact Telepod customer support for more information.",
-      res,400,"https://ibb.co/k2zQzG");
-      return;
-  }
-
-  var _userId = req.query.userId;
-  var _transactionId = req.query.transactionId;
-
-  logger.logAPICall(ip,"/1.0/getUserReceipt@1538",[_userId,_transactionId],req.session.uid);
-  HardwareController.requestInvoiceURL(_userId,_transactionId).then(function(obj){
-    res.json(obj);
-  }).catch(function(e){
-    logger.catchFunc2(ip,"ERROR","/1.0/getUserReceipt@1542","Error 1.0_1542",
-      "There seems to be an issue with your request.Contact Telepod customer support for more information.",
-      res,400,"https://ibb.co/k2zQzG");
-  });
-} */
 
 exports.unlockScooter = function(req, res)
 {
@@ -1823,4 +1684,526 @@ exports.getUserTransactions = function(req, res)
       "There seems to be an issue with your request.Contact Telepod customer support for more information.",
       res,400,"https://ibb.co/k2zQzG");
   });
+}
+
+exports.getProjectPKey = function(req, res)
+{
+  const deferred = Q.defer();
+  const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+  const accountGroup = req.session.accountGroup === undefined ? "NIL" : req.session.accountGroup;
+  const _userId = req.query.userId === undefined ? "NIL" : req.query.userId;
+  if(_userId === "NIL"){
+    logger.catchFunc2(ip,"ERROR_MIS_PARM","/1.0/getProjectPKey@1691","Error 1.0_1691",
+      "There seems to be an issue with your request.Contact Telepod customer support for more information.",
+      res,400,"https://ibb.co/k2zQzG");
+      return;
+  }
+  logger.logAPICall(ip,"/1.0/getProjectPKey@1696",[_userId,accountGroup],req.session.uid);
+  try
+  {
+    const db = dbUtil.admin.database();
+    const commonRef = accountGroup === "NIL" ? db.ref("Common") :
+      db.ref(accountGroup).child("Common");
+    const userRef = accountGroup === "NIL" ? db.ref("Users") : 
+      db.ref(accountGroup).child("Users");
+    var _userObj = new userModel();
+    var _commonObj = new commonModel();
+    userRef.child(_userId).once("value").then(function(userSnapshot){
+      if(!userSnapshot.exists())
+      {
+        throw(logger.logErrorReport("ERROR","/1.0/getProjectPKey@1709",[_userId,accountGroup]));
+      }
+      else
+      {
+        Object.assign(_userObj,userSnapshot.val());
+        var _commonCountry = _userObj.country === "NIL" ? "DEF" : _userObj.country;
+        return commonRef.child(_commonCountry).once("value");
+      }
+    }).then(function(commonSnapshot){
+      if(!commonSnapshot.exists())
+      {
+        throw(logger.logErrorReport("ERROR","/1.0/getProjectPKey@1720",[_userId,_userObj.country,accountGroup]));
+      }
+      else
+      {
+        Object.assign(_commonObj,commonSnapshot.val());
+        if(_commonObj.stripePublishKey === "NIL" || _commonObj.stripeSecretKey === "NIL")
+        {
+          logger.catchFunc2(ip,"ERROR_NIL_STRIPEKEY","/1.0/getProjectPKey@1730",
+            "Stripe API Error\n[GPPK1_0_1732]",
+            "There seems to be a problem in processing your request. Please try again",
+            res,400,"https://ibb.co/k2zQzG");
+          deferred.reject;
+        }
+        else
+        {
+          res.json({"stripePublishKey":_commonObj.stripePublishKey});
+          deferred.resolve;
+        }
+      }
+    }).catch(function(e){
+      logger.log("error",e);
+      logger.catchFunc2(ip,"ERROR","/1.0/getProjectPKey@1732","Stripe API Error\n[GPPK1_0_1732]",
+        "There seems to be a problem in processing your request. Please try again",
+        res,400,"https://ibb.co/k2zQzG");
+      deferred.reject;
+    });
+  }
+  catch(e){
+    logger.log("error",e);
+    logger.catchFunc2(ip,"ERROR","/1.0/getProjectPKey@1739","Error 1.1739",
+      "There seems to be an issue with your request.Contact Telepod customer support for more information.",
+      res,400,"https://ibb.co/k2zQzG");
+    deferred.reject;
+  }
+  return deferred.promise;
+}
+
+exports.createPaymentIntent = function(req,res)
+{
+  //userId,creditCardToken,passId,paymentAmount,paymentType(Optional)
+  // "0:DEPOSIT 1:CREDIT 2:REFUND 3:PASS 4:FINE-CREDIT 5:FINE-DEPOSIT 6:TRIP FARE"		
+  const deferred = Q.defer();
+  var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+  var _userId = req.body.userId;
+  var _creditCardToken = req.body.creditCardToken === undefined || !req.body.creditCardToken ||
+    req.body.creditCardToken === "" ? "NIL" : req.body.creditCardToken
+  var _passId = req.body.passId === undefined || !req.body.passId ||
+    req.body.passId === "" ? "NIL" : req.body.passId
+  var _paymentAmount = req.body.paymentAmount === undefined || !req.body.paymentAmount ||
+    req.body.paymentAmount === "" || isNaN(req.body.paymentAmount) ? 0 : parseInt(req.body.paymentAmount);
+  var _paymentType = req.body.paymentType === undefined || !req.body.paymentType ||
+    req.body.paymentType === "" || isNaN(req.body.paymentType) ? 1 : parseInt(req.body.paymentAmount);
+
+  const accountGroup = req.session.accountGroup === undefined ? "NIL" : req.session.accountGroup;
+  logger.logAPICall(ip,"/1.0/createPaymentIntent@1757",[_userId,_creditCardToken,_passId,_paymentAmount,
+    _paymentType,accountGroup],req.session.uid);
+  
+
+  if(_userId === undefined || !_userId || _userId === "")
+  {
+    logger.catchFunc2(ip,"ERROR_MIS_PARM","/1.0/createPaymentIntent@1785","Error 1.0_1785",
+    "There seems to be an issue with your request.Contact Telepod customer support for more information.",
+    res,400,"https://ibb.co/k2zQzG");
+    deferred.resolve;
+  }
+  if(_passId === "NIL" && _paymentAmount <= 0)
+  {
+    logger.catchFunc2(ip,"ERROR","/1.0/createPaymentIntent@1792","Error 1.0_1792",
+    "There seems to be an issue with your request.Contact Telepod customer support for more information.",
+    res,400,"https://ibb.co/k2zQzG");
+    deferred.resolve;
+  }
+
+  try{
+    var stripe;
+    const db = dbUtil.admin.database();
+    const commonRef = accountGroup === "NIL" ? db.ref("Common") :
+      db.ref(accountGroup).child("Common");
+    const userRef = accountGroup === "NIL" ? db.ref("Users") : 
+      db.ref(accountGroup).child("Users");
+    const transactionRef = accountGroup === "NIL" ? db.ref("Transactions") : 
+      db.ref(accountGroup).child("Transactions");
+    var passRef = accountGroup === undefined || accountGroup === "NIL" ? 
+      db.ref("Marketing").child("Subscriptions") :
+      db.ref(_accountGroup).child("Subscriptions"); 
+
+    var _userTransactionObj = new transactionModel();
+    var _userObj = new userModel();
+    var _userPaymentIntent = new paymentIntentModel();
+    var _commonObj = new commonModel();
+    var _userPassObj = new passModel();
+    var _userPaymentMethod = new paymentMethodModel();
+
+    userRef.child(_userId).once("value").then(function(userSnapshot){
+      if(!userSnapshot.exists())
+      {
+        throw(logger.logErrorReport("ERROR_USER_NO_EXIST","/1.0/createPaymentIntent@1720",
+          [_userId,accountGroup]));
+      }
+      else
+      {
+        Object.assign(_userObj,userSnapshot.val());
+        if(_userObj.creditCardToken === "NIL" && _creditCardToken === "NIL")
+        {//means no available creditToken...throw
+          throw(logger.logErrorReport("ERROR_USER_NO_CCTOKEN","/1.0/createPaymentIntent@1829",
+            [_userId,accountGroup]));
+        }
+        else
+        {
+          var _commonCountry = _userObj.country === "NIL" ? "DEF" : _userObj.country;
+          return commonRef.child(_commonCountry).once("value");
+        }
+      }
+    }).then(function(commonSnapshot){
+      if(!commonSnapshot.exists())
+      {
+        throw(logger.logErrorReport("ERROR_COMMON_NO_EXIST","/1.0/createPaymentIntent@1720",
+        [_userId,_userObj.country,accountGroup]));
+      }
+      else
+      {
+        Object.assign(_commonObj,commonSnapshot.val());
+        if(_commonObj.stripeSecretKey === "NIL" || _commonObj.stripePublishKey === "NIL")
+        {
+          throw(logger.logErrorReport("ERROR_NIL_STRIPEKEY","/1.0/createPaymentIntent@1720",
+          [_userId,_userObj.country,accountGroup]));
+        }
+        else if(_userObj.currency === "NIL" || _userObj.country === "NIL")
+        {
+          throw(logger.logErrorReport("ERROR_NIL_USERCOUNTRY","/1.0/createPaymentIntent@1720",
+          [_userId,_userObj.country,accountGroup]));
+        }
+        else
+        {
+          stripe = require("stripe")(_commonObj.stripeSecretKey);
+          if(_userObj.customerId === "NIL")
+          {
+            //if NIL create customer object
+            return stripe.customers.create(
+            {
+              phone:_userObj.contact,
+              metadata:{
+                "userId":_userId
+              }
+            });
+          }
+          else
+          {
+            //else fetch customer object
+            return stripe.customers.retrieve(_userObj.customerId);
+          }
+        }
+      }
+    }).then(function(_customerObj){
+      Object.assign(_userObj,{"customerId":_customerObj.id});
+      Object.assign(_userTransactionObj,{"country":_userObj.country,"currency":_userObj.currency})
+      if(_passId === "NIL" && _paymentAmount <= 0)
+      {
+        throw(logger.logErrorReport("ERROR_PAYMENTAMOUNT","/1.0/createPaymentIntent@1875",
+          [_userId,_paymentAmount,accountGroup]));
+      }
+      return passRef.child(_passId).once("value");
+    }).then(function(passSnapshot){
+      if(passSnapshot.exists())
+      {
+        Object.assign(_userPassObj,passSnapshot.val())
+      }
+      return stripe.paymentIntents.create({
+        description: _passId !== "NIL" ? "Pass purchasal " + _passId : "Credit/Deposit Purchasal",
+        amount: _passId !== "NIL" ? _userPassObj.costPrice : _paymentAmount,
+        customer: _userObj.customerId,
+        currency: _userObj.currency,
+        payment_method: _userObj.creditCardToken !== "NIL" ? _userObj.creditCardToken : _creditCardToken,
+        confirm: true,
+        metadata:{
+          "userId":_userId
+        }
+      });    
+    }).then(function(_paymentIntentObj){
+      Object.assign(_userPaymentIntent,_paymentIntentObj);
+      if(_userPaymentIntent.status === "succeeded")
+      {
+        //fetch the payment method object here
+        return stripe.paymentMethods.retrieve(_userPaymentIntent.payment_method).catch(function(e){
+          logger.log("info",logger.logErrorReport("ERROR","/1.0/createPaymentIntent@1926",[e]));
+          return true;
+        });
+      }
+      else
+      {
+        throw(logger.logErrorReport("ERROR_PAYMENT","/1.0/createPaymentIntent@1928",
+          [_userId,_userPaymentIntent.status,accountGroup]));
+      }
+    }).then(function(_paymentMethod){
+      Object.assign(_userPaymentMethod,_paymentMethod);
+      Object.assign(_userObj,{
+        "credits" : _passId !== "NIL" ? _userObj.credits : _userObj.credits + _paymentAmount,
+        "creditCardToken":_userPaymentIntent.payment_method,
+        "creditCardType":_paymentMethod.card.brand,
+        "creditCardNumber":_paymentMethod.card.last4,
+        "creditCardUID":_paymentMethod.card.fingerprint
+      });
+      return userRef.child(_userId).update(_userObj);
+    }).then(function(){
+      Object.assign(_userTransactionObj,{
+        "creditCardToken":_userObj.creditCardToken,
+        "creditCardType":_userObj.creditCardType,
+        "creditCardNumber":_userObj.creditCardNumber,
+        "hasExpired":false,
+        "passId":_passId,
+        "passLevel":_userPassObj.passLevel,
+        "paymentAmount":_userPassObj.paymentAmount,
+        "paymentType": _passId !== "NIL" ? 3 : 1
+      })
+      return transactionRef.child(_userId).child(_userPaymentIntent.id).update(_userTransactionObj);
+    }).then(function(){
+      res.json({"status":"OK"})
+      deferred.resolve;
+    }).catch(function(e){
+      logger.log("error",e);
+      logger.catchFunc2(ip,"ERROR","/1.0/createPaymentIntent@1962","Stripe API Error\n[GPPK1_0_1962]",
+        "There seems to be a problem in processing your request. Please try again",
+        res,400,"https://ibb.co/k2zQzG");
+      deferred.reject;
+    })
+  }
+  catch(e)
+  {
+    logger.catchFunc2(ip,"ERROR","/1.0/createPaymentIntent@1970","Error 1.1970",
+    "There seems to be an issue with your request.Contact Telepod customer support for more information.",
+    res,400,"https://ibb.co/k2zQzG");
+  deferred.reject;
+  }
+  return deferred.promise;
+}
+
+exports.authenticatePaymentIntent = function(req,res)
+{
+  // userId,paymentMethodId
+  const deferred = Q.defer();
+  var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+  var _userId = req.body.userId;
+  var _creditCardToken = req.body.creditCardToken;
+  const accountGroup = req.session.accountGroup === undefined ? "NIL" : req.session.accountGroup;
+
+  if(_creditCardToken === undefined || _creditCardToken === "NIL")
+  {
+    logger.catchFunc2(ip,"ERROR_MIS_PARM","/1.0/authenticatePaymentIntent@1907","Error 1.0_1907",
+    "There seems to be an issue with your request.Contact Telepod customer support for more information.",
+    res,400,"https://ibb.co/k2zQzG");
+    deferred.resolve();
+  }
+
+  if(_userId === undefined || _userId === "NIL")
+  {
+    logger.catchFunc2(ip,"ERROR_MIS_PARM","/1.0/authenticatePaymentIntent@1915","Error 1.0_1915",
+    "There seems to be an issue with your request.Contact Telepod customer support for more information.",
+    res,400,"https://ibb.co/k2zQzG");
+    deferred.resolve;
+  }
+  logger.logAPICall(ip,"/1.0/authenticatePaymentIntent@1920",[_userId,_creditCardToken,accountGroup],
+    req.session.uid);
+  try{
+    var stripe;
+    const db = dbUtil.admin.database();
+    const commonRef = accountGroup === "NIL" ? db.ref("Common") :
+      db.ref(accountGroup).child("Common");
+    const userRef = accountGroup === "NIL" ? db.ref("Users") : 
+      db.ref(accountGroup).child("Users");
+
+    var _userObj = new userModel();
+    var _commonObj = new commonModel();
+    var _userPaymentIntent = new paymentIntentModel();
+    var _userPaymentMethod = new paymentMethodModel();
+
+    userRef.child(_userId).once("value").then(function(userSnapshot){
+      if(!userSnapshot.exists())
+      {
+        throw(logger.logErrorReport("ERROR_USER_NO_EXIST","/1.0/authenticatePaymentIntent@1929",
+        [_userId,_creditCardToken,accountGroup]));
+      }
+      else
+      {
+        Object.assign(_userObj,userSnapshot.val());
+        var _commonCountry = _userObj.country === "NIL" ? "DEF" : _userObj.country;
+        return commonRef.child(_commonCountry).once("value");
+      }
+    }).then(function(commonSnapshot){
+      if(!commonSnapshot.exists())
+      {
+        throw(logger.logErrorReport("ERROR_COMMON_NO_EXIST","/1.0/authenticatePaymentIntent@1940",
+        [_userId,_userObj.country,accountGroup]));
+      }
+      else
+      {
+        Object.assign(_commonObj,commonSnapshot.val());
+        if(_commonObj.stripeSecretKey === "NIL" || _commonObj.stripePublishKey === "NIL")
+        {
+          throw(logger.logErrorReport("ERROR_NIL_STRIPEKEY","/1.0/authenticatePaymentIntent@1948",
+          [_userId,_userObj.country,accountGroup]));
+        }
+        else if(_userObj.currency === "NIL" || _userObj.country === "NIL")
+        {
+          throw(logger.logErrorReport("ERROR_NIL_USERCOUNTRY","/1.0/authenticatePaymentIntent@1953",
+          [_userId,_userObj.country,accountGroup]));
+        }
+        else
+        {
+          stripe = require("stripe")(_commonObj.stripeSecretKey);
+          if(_userObj.customerId === "NIL")
+          {
+            //if NIL create customer object
+            return stripe.customers.create(
+            {
+              phone:_userObj.contact,
+              metadata:{
+                "userId":_userId
+              }
+            });
+          }
+          else
+          {
+            //else fetch customer object
+            return stripe.customers.retrieve(_userObj.customerId);
+          }
+        }
+      }
+    }).then(function(_customerObj){
+      Object.assign(_userObj,{"customerId":_customerObj.id});
+
+        return stripe.paymentIntents.create({
+          description:"Customer credit card authentication",
+          amount: 500,
+          customer: _customerObj.id,
+          currency: _userObj.currency,
+          payment_method: _creditCardToken,
+          confirm:true,
+          capture_method:"manual",
+          setup_future_usage: "off_session",
+          metadata:{
+            "userId":_userId
+          }
+        }).catch(function(_paymentErr){
+          throw(logger.logErrorReport("ERROR_STRIPE_CONFIRMATION","/1.0/authenticatePaymentIntent@1991",
+          [_userId,_userObj.country,_paymentErr.decline_code,accountGroup]));
+        });     
+    }).then(function(_paymentIntentObj){
+      Object.assign(_userPaymentIntent,_paymentIntentObj);
+      if(_userPaymentIntent.status !== "requires_capture")
+      {
+        throw(logger.logErrorReport("ERROR_STRIPE_STATUS","/1.0/authenticatePaymentIntent@1991",
+        [_userId,_userObj.country,_userPaymentIntent.status,accountGroup]));
+      }
+      else
+      {
+        return stripe.paymentIntents.cancel(_userPaymentIntent.id).catch(function(e){
+          logger.log("info",logger.logErrorReport("ERROR","/1.0/authenticatePaymentIntent@2014",[e]));
+          return true;
+        });
+      }
+    }).then(function(){
+      return stripe.paymentMethods.retrieve(_creditCardToken).catch(function(e){
+        logger.log("info",logger.logErrorReport("ERROR","/1.0/authenticatePaymentIntent@2020",[e]));
+        return true;
+      });
+    }).then(function(_paymentMethod){
+      Object.assign(_userPaymentMethod,_paymentMethod);
+      Object.assign(_userObj,{
+        "creditCardToken":_creditCardToken,
+        "creditCardType":_paymentMethod.card.brand,
+        "creditCardNumber":_paymentMethod.card.last4,
+        "creditCardUID":_paymentMethod.card.fingerprint
+      });
+      return userRef.child(_userId).update(_userObj).catch(function(){
+        return true;
+      });
+    }).then(function(){
+      res.json({"status":"OK"});
+      deferred.resolve;
+    }).catch(function(e){
+      logger.log("error",e);
+      logger.catchFunc2(ip,"ERROR","/1.0/authenticatePaymentIntent@1732","Stripe API Error\n[GPPK1_0_1732]",
+        "There seems to be a problem in processing your request. Please try again",
+        res,400,"https://ibb.co/k2zQzG");
+      deferred.reject;
+    })
+  }
+  catch(e)
+  {
+    logger.catchFunc2(ip,"ERROR","/1.0/authenticatePaymentIntent@1739","Error 1.1739",
+    "There seems to be an issue with your request.Contact Telepod customer support for more information.",
+    res,400,"https://ibb.co/k2zQzG");
+  deferred.reject;
+  }
+
+  return deferred.promise;
+}
+
+exports.removeCC = function(req, res)
+{
+  const deferred = Q.defer();
+  const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+  const accountGroup = req.session.accountGroup === undefined ? "NIL" : req.session.accountGroup;
+  const _userId = req.query.userId === undefined ? "NIL" : req.query.userId;
+  if(_userId === "NIL"){
+    logger.catchFunc2(ip,"ERROR_MIS_PARM","/1.0/removeCC@2130","Error 1.0_2130",
+      "There seems to be an issue with your request.Contact Telepod customer support for more information.",
+      res,400,"https://ibb.co/k2zQzG");
+      return;
+  }
+  logger.logAPICall(ip,"/1.0/removeCC@2135",[_userId,accountGroup],req.session.uid);
+  try
+  {
+    const db = dbUtil.admin.database();
+    var stripe;
+    const commonRef = accountGroup === "NIL" ? db.ref("Common") :
+      db.ref(accountGroup).child("Common");
+    const userRef = accountGroup === "NIL" ? db.ref("Users") : 
+      db.ref(accountGroup).child("Users");
+    var _userObj = new userModel();
+    var _commonObj = new commonModel();
+    userRef.child(_userId).once("value").then(function(userSnapshot){
+      if(!userSnapshot.exists())
+      {
+        throw(logger.logErrorReport("ERROR","/1.0/removeCC@2148",[_userId,accountGroup]));
+      }
+      else
+      {
+        Object.assign(_userObj,userSnapshot.val());
+        var _commonCountry = _userObj.country === "NIL" ? "DEF" : _userObj.country;
+        return commonRef.child(_commonCountry).once("value");
+      }
+    }).then(function(commonSnapshot){
+      if(!commonSnapshot.exists())
+      {
+        throw(logger.logErrorReport("ERROR","/1.0/removeCC@2159",[_userId,_userObj.country,accountGroup]));
+      }
+      else
+      {
+        Object.assign(_commonObj,commonSnapshot.val());
+        if(_commonObj.stripePublishKey === "NIL" || _commonObj.stripeSecretKey === "NIL")
+        {
+          logger.catchFunc2(ip,"ERROR_NIL_STRIPEKEY","/1.0/removeCC@2166",
+            "Stripe API Error\n[GPPK1_0_1732]",
+            "There seems to be a problem in processing your request. Please try again",
+            res,400,"https://ibb.co/k2zQzG");
+          deferred.reject;
+        }
+        else
+        {
+          stripe = require("stripe")(_commonObj.stripeSecretKey);
+          return stripe.paymentMethods.detach(_userObj.creditCardToken).catch(function(e){
+            return true;
+          })
+        }
+      }
+    }).then(function(){
+      //update user
+      Object.assign(_userObj,{
+        "creditCardNumber":"NIL",
+        "creditCardToken":"NIL",
+        "creditCardType":"NIL",
+        "creditCardUID":"NIL"
+      });
+      return userRef.child(_userId).update(_userObj);
+    }).then(function(){
+      res.json({"status":"OK"});
+      deferred.resolve;
+    }).catch(function(e){
+      logger.log("error",e);
+      logger.catchFunc2(ip,"ERROR","/1.0/removeCC@2180","Stripe API Error\n[RCC1_0_2180]",
+        "There seems to be a problem in processing your request. Please try again",
+        res,400,"https://ibb.co/k2zQzG");
+      deferred.reject;
+    });
+  }
+  catch(e){
+    logger.log("error",e);
+    logger.catchFunc2(ip,"ERROR","/1.0/removeCC@2188","Error 1.2188",
+      "There seems to be an issue with your request.Contact Telepod customer support for more information.",
+      res,400,"https://ibb.co/k2zQzG");
+    deferred.reject;
+  }
+  return deferred.promise;
 }

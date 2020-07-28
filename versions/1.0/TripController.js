@@ -183,11 +183,6 @@ exports.quickBook = function(userId,scooterId,stationId,userLat,userLng,userPaym
       return dbController.addTripQueue(userId,tripId,scooterId,stationId,_stationObj.stationName,
         _stationObj.stationName,tempStatus,bookingTime,_accountGroup);
     }).then(function(){
-      return logger.scooterLogging(scooterId,"InUse").catch(function(e){
-        logger.log("error",logger.logErrorReport("ERROR","/1.0/quickBook@171",["SCOOTERLOGGING_ERR"]));
-        return true;
-      });
-    }).then(function(){
       return dbController.setGPSOBJ(_gpsObj.IMEI,{"status":"InUse","lastStatusChange":bookingTime,"action":-1,
         "lastUser":userId,"lastSubmitted" : -1,"lastImg" : "NIL"});
     }).then(function(){
@@ -359,11 +354,6 @@ exports.qrDocklessDropCheck = function(userId,userTripId,qrString,userLat,userLn
         return dbController.removeTripQueue(_userTripObj.scooterId,_accountGroup).then(function(){
           hardware.gpsLowRelayCommand(_userTripObj.scooterId);
           return true;
-        }).then(function(){
-          return logger.scooterLogging(_userTripObj.scooterId,"Available").catch(function(e){
-            logger.log("error",logger.logErrorReport("ERROR","/1.0/qrDocklessDropCheck@360",["SCOOTERLOGGING_ERR"]));
-            return true;
-          });
         }).then(function(){
           return dbController.setGPSOBJ(_gpsObj.IMEI,{"stationId":dropOffStationId,
             "lastStatusChange":returnTime,"totalUsageTime":_gpsObj.totalUsageTime,
