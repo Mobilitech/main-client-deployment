@@ -8,6 +8,7 @@ class Common
     this.creditMin = 0;
     this.depositMin = 4900;
     this.freeRideSecs = 60;
+    this.stripeAuthAmount = 200;
     this.geofenceRadiusM = 1000;
     this.geofenceTheftRadiusM = 400;
     this.gpsADTRate = 1;

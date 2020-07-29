@@ -1806,7 +1806,7 @@ exports.createPaymentIntent = function(req,res)
       db.ref(accountGroup).child("Transactions");
     var passRef = accountGroup === undefined || accountGroup === "NIL" ? 
       db.ref("Marketing").child("Subscriptions") :
-      db.ref(_accountGroup).child("Subscriptions"); 
+      db.ref(accountGroup).child("Subscriptions"); 
 
     var _userTransactionObj = new transactionModel();
     var _userObj = new userModel();
@@ -1933,7 +1933,7 @@ exports.createPaymentIntent = function(req,res)
         "hasExpired":false,
         "passId":_passId,
         "passLevel":_userPassObj.passLevel,
-        "paymentAmount":_userPassObj.paymentAmount,
+        "paymentAmount":_passId !== "NIL" ? _userPassObj.costPrice : _paymentAmount,
         "paymentType": _passId !== "NIL" ? 3 : 1
       })
       return transactionRef.child(_userId).child(_userPaymentIntent.id).update(_userTransactionObj);
