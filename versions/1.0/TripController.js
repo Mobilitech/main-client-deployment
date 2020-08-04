@@ -39,9 +39,6 @@ exports.quickBook = function(userId,scooterId,stationId,userLat,userLng,userPaym
   const zoneRef = _accountGroup === undefined || _accountGroup === "NIL" ? 
     db3.ref("Zone") : db3.ref(_accountGroup).child("Zone");
 
-  var dropOffOBJ = {};
-  var pickUpOBJ = {};
-
   var userHasCreditsAndDeposit = false;
   var userPassTransactionId = "NIL";
   var bookingTime = new Date().getTime();
@@ -144,29 +141,17 @@ exports.quickBook = function(userId,scooterId,stationId,userLat,userLng,userPaym
           userLng,userPaymentType]));
       }
     }).then(function(){
-      dropOffOBJ["stationId"] = stationId;
-      dropOffOBJ["zoneId"] = _zoneObj.zoneId;
-      dropOffOBJ["stationName"] = _stationObj.stationName;
-      dropOffOBJ["dropOffTime"] = 0;
-
-      pickUpOBJ["stationId"] = stationId;
-      pickUpOBJ["zoneId"] = _zoneObj.zoneId;
-      pickUpOBJ["pickUpTime"] = bookingTime;
-      pickUpOBJ["stationName"] = _stationObj.stationName;
-
       Object.assign(_tripObj,{
         "scooterId" : scooterId,
         "IMEI": _gpsObj.IMEI,
         "passTransactionId" : userPassTransactionId,
-        "dropOff": dropOffOBJ,
-        "pickUp":pickUpOBJ,
         "bookingTime": bookingTime,
         "status": _previousTripObj.status === "TRIP_STARTED" ? "MULTI_TRIP_STARTED" :
           _previousTripObj.status === "MULTI_TRIP_STARTED" ? "MULTI_TRIP_STARTED" : "TRIP_STARTED",
         "tripRefId": _previousTripObj.status === "TRIP_STARTED" ? _previousTripObj.tripRefId :
           _previousTripObj.status == "MULTI_TRIP_STARTED" ? _previousTripObj.tripRefId : tripId,
         "saveCreditCard": userSaveCreditCard,
-        "isMultiTrip": _previousTripObj.status == "TRIP_STARTED" ? true :
+        "isMultiTrip": _previousTripObj.status === "TRIP_STARTED" ? true :
           _previousTripObj.status == "MULTI_TRIP_STARTED" ? true : false,
         "paymentType": userPaymentType,
         "userLocationAtBooking": [parseFloat(userLat),parseFloat(userLng)],
@@ -190,7 +175,7 @@ exports.quickBook = function(userId,scooterId,stationId,userLat,userLng,userPaym
     }).then(function(){
       return dbController.setStationOBJ(stationId,{"scooterAvail":--_stationObj.scooterAvail},_accountGroup);
     }).then(function(){
-      hardware.gpsHighRelayCommand(scooterId);
+      hardware.gpsHighRelayCommand(_accountGroup,scooterId);
       return true;
     }).then(function(){
       Object.assign(_tripObj,{
@@ -250,11 +235,11 @@ exports.qrDocklessDropCheck = function(userId,userTripId,qrString,userLat,userLn
       "statusCode": tell[1].statusCode & 0xFE
     });
 
-    if(_userTripObj.status == "DROPOFF_RETURNED" || _userTripObj.status == "DROPOFF_COMPLETION")
+    if(_userTripObj.status === "DROPOFF_RETURNED" || _userTripObj.status === "DROPOFF_COMPLETION")
     {
       deferred.resolve({"status":"OK"});
     }
-    else if(_userTripObj.status != "TRIP_STARTED" && _userTripObj.status != "MULTI_TRIP_STARTED")
+    else if(_userTripObj.status !== "TRIP_STARTED" && _userTripObj.status !== "MULTI_TRIP_STARTED")
     {
       throw(logger.logErrorReport("ERROR","/1.0/qrDocklessDropCheck@292",
         [userId,userTripId,qrString,userLat,userLng]));
@@ -352,7 +337,7 @@ exports.qrDocklessDropCheck = function(userId,userTripId,qrString,userLat,userLn
     else
     {
         return dbController.removeTripQueue(_userTripObj.scooterId,_accountGroup).then(function(){
-          hardware.gpsLowRelayCommand(_userTripObj.scooterId);
+          hardware.gpsLowRelayCommand(_accountGroup,_userTripObj.scooterId);
           return true;
         }).then(function(){
           return dbController.setGPSOBJ(_gpsObj.IMEI,{"stationId":dropOffStationId,

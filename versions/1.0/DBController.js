@@ -622,7 +622,6 @@ exports.addTripQueue = function(userId,tripId,scooterId,pickUpStationId,fromStat
   const db = dbUtil.admin.database();
   const queueRef = _accountGroup === undefined || _accountGroup === "NIL" ? 
     db.ref("Queue") : db.ref(_accountGroup).child("Queue");
-
   queueRef.orderByChild("userId").equalTo(userId).limitToLast(1).once("value").then(function(microsnapshot){
     if(microsnapshot.exists() && prevTripStatus !== "MULTI_TRIP_STARTED" && prevTripStatus !== "TRIP_STARTED")
     {

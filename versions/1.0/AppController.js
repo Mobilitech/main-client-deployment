@@ -951,137 +951,10 @@ exports.findNumberUserObj = function(req,res)
   });
 }
 
-// exports.getTeleveryStations = function(req, res)
-// {
-//   var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-//   logger.logAPICall(ip,"/1.0/getTeleveryStations@1033",["NIL"],req.session.uid);
-//   DBController.getTeleveryStations().then(function(data)
-//   {
-//     res.json(data);
-//   }).catch(function(err){
-//     logger.catchFunc2(ip,"ERROR","/1.0/getTeleveryStations@1038","Televery Error\n[GTS1_0_1038]",
-//       "There seems to be an issue with your request.Contact Telepod customer support for more information.",
-//       res,204,"https://ibb.co/k2zQzG");
-//   });
-// }
-
-/* exports.userHasTeleveryReq = function(req,res)
-{
-  var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-  var userId = req.query.userId;
-  if(!userId)
-  {
-    logger.catchFunc2(ip,"ERROR_MIS_PARM","/1.0/userHasTeleveryReq@1050","Televery Error\n[USTR1_0_1050]",
-      "There seems to be a problem in processing your request. Please try again",
-      res,400,"https://ibb.co/k2zQzG");
-    return;
-  }
-  logger.logAPICall(ip,"/1.0/userHasTeleveryReq@1055",[userId],req.session.uid);
-  DBController.userHasTeleveryReq(userId).then(function(data)
-  {
-    res.json(data);
-  }).catch(function(err){
-    logger.catchFunc2(ip,"ERROR","/1.0/userHasTeleveryReq@1060","Televery Error\n[CTR1_0_1060]",
-      "There seems to be a problem in processing your request. Please try again",
-      res,400,"https://ibb.co/k2zQzG");
-  });
-} */
-
-/* exports.createTeleveryReq = function(req,res)
-{
-  var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-  var userId = req.body.userId;
-  var tripId = req.body.tripId;
-  var stationId = req.body.qr;
-  if(!userId)
-  {
-    logger.catchFunc2(ip,"ERROR_MIS_PARM","/1.0/createTeleveryReq@1074","Televery Error\n[CTR1_0_1074]",
-      "There seems to be a problem in processing your request. Please try again",
-      res,400,"https://ibb.co/k2zQzG");
-    return;
-  }
-  if(!tripId)
-  {
-    logger.catchFunc2(ip,"ERROR_MIS_PARM","/1.0/createTeleveryReq@1081","Televery Error\n[CTR1_0_1081]",
-      "There seems to be a problem in processing your request. Please try again",
-      res,400,"https://ibb.co/k2zQzG");
-    return;
-  }
-  if(!stationId)
-  {
-    logger.catchFunc2(ip,"ERROR_MIS_PARM","/1.0/createTeleveryReq@1088","Televery Error\n[CTR1_0_1088]",
-      "There seems to be a problem in processing your request. Please try again",
-      res,400,"https://ibb.co/k2zQzG");
-    return;
-  }
-  logger.logAPICall(ip,"/1.0/createTeleveryReq@1093",[userId,stationId,tripId],req.session.uid);
-  DBController.createTeleveryReq(userId,stationId,tripId).then(function(data)
-  {
-    res.json(data);
-  }).catch(function(err){
-    logger.catchFunc2(ip,"ERROR","/1.0/createTeleveryReq@1098","Televery Error\n[CTR1_0_1098]",
-      "There seems to be a problem in processing your request. Please try again",
-      res,400,"https://ibb.co/k2zQzG");
-  });
-} */
-
-/* exports.cancelTeleveryReq = function(req,res)
-{
-  var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-  var userId = req.body.userId;
-  if(!userId)
-  {
-    logger.catchFunc2(ip,"ERROR_MIS_PARM","/1.0/cancelTeleveryReq@1110","Televery Error\n[CTR1_0_1110]",
-      "There seems to be a problem in processing your request. Please try again",
-      res,400,"https://ibb.co/k2zQzG");
-    return;
-  }
-  logger.logAPICall(ip,"/1.0/cancelTeleveryReq@1115",[userId],req.session.uid);
-  DBController.removeTeleveryReqQueue(userId).then(function(data)
-  {
-    res.json(data);
-  }).catch(function(err){
-    logger.catchFunc2(ip,"ERROR","/1.0/cancelTeleveryReq@1120","Televery Error\n[CTR1_0_1120]",
-      "There seems to be a problem in processing your request. Please try again",
-      res,400,"https://ibb.co/k2zQzG");
-  });
-} */
-
-/* exports.finTeleveryReq = function(req,res)
-{
-  var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-  var userId = req.body.userId;
-  var batteryId = req.body.qr;
-  if(!userId)
-  {
-    logger.catchFunc2(ip,"ERROR_MIS_PARM","/1.0/finTeleveryReq@1133","Televery Error\n[CTR1_0_1133]",
-      "There seems to be a problem in processing your request. Please try again",
-      res,400,"https://ibb.co/k2zQzG");
-    return;
-  }
-  if(!batteryId)
-  {
-    logger.catchFunc2(ip,"ERROR_MIS_PARM","/1.0/finTeleveryReq@1140","Televery Error\n[CTR1_0_1140]",
-      "There seems to be a problem in processing your request. Please try again",
-      res,400,"https://ibb.co/k2zQzG");
-    return;
-  }
-  logger.logAPICall(ip,"/1.0/finTeleveryReq@1145",[userId,batteryId],req.session.uid);
-  DBController.finTeleveryReq(userId,batteryId).then(function(data)
-  {
-    res.json(data);
-  }).catch(function(err){
-    logger.catchFunc2(ip,"ERROR","/1.0/finTeleveryReq@1150","Televery Error\n[1150]",
-      "There seems to be a problem in processing your request. Please try again",
-      res,400,"https://ibb.co/k2zQzG");
-  });
-}
- */
-
 exports.buzzScooter = function(req, res)
 {
   const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-
+  const accountGroup = req.session.accountGroup === undefined ? "NIL" : req.session.accountGroup;
   if(!req.query.scooterId){
     logger.catchFunc2(ip,"ERROR_MIS_PARM","/1.0/buzzScooter@1284","Error 1.0_1207",
       "There seems to be an issue with your request.Contact Telepod customer support for more information.",
@@ -1089,8 +962,8 @@ exports.buzzScooter = function(req, res)
       return;
   }
 
-  logger.logAPICall(ip,"/1.0/buzzScooter@1290",[req.query.targetLocation],req.session.uid);
-  HardwareController.buzzerOn(req.query.scooterId).then(function(result){
+  logger.logAPICall(ip,"/1.0/buzzScooter@1290",[accountGroup,req.query.targetLocation],req.session.uid);
+  HardwareController.buzzerOn(accountGroup,req.query.scooterId).then(function(result){
     res.json(result);
   }).catch(function(err){
     logger.catchFunc2(ip,"ERROR","/1.0/buzzScooter@1294","Error 1.0_1217",
@@ -1143,9 +1016,9 @@ exports.swapScooter = function(req, res)
     _tripStatus = _tripObj.status;
     _tripScooterId = _tripObj.scooterId;
     _nowTime = _tripObj.bookingTime;
-    if(_tripStatus == "TRIP_STARTED" || _tripStatus == "MULTI_TRIP_STARTED")
+    if(_tripStatus === "TRIP_STARTED" || _tripStatus === "MULTI_TRIP_STARTED")
     {
-      if(_tripScooterId == _scooterId)
+      if(_tripScooterId === _scooterId)
       {
         throw(logger.logErrorReport("ERROR_SAME_SCOOTER","/1.0/swapScooter@1271",[_userId,_tripId,_scooterId]));
       }
@@ -1159,7 +1032,7 @@ exports.swapScooter = function(req, res)
       throw(logger.logErrorReport("ERROR","/1.0/swapScooter@1280",[_userId,_tripId,_scooterId]));
     }
   }).then(function(){
-    HardwareController.gpsLowRelayCommand(_tripScooterId);
+    HardwareController.gpsLowRelayCommand(accountGroup,_tripScooterId);
     return DBController.setScooterOBJ(_tripScooterId,{"status":"Available","lastStatusChange":_nowTime,"action":-1,
     "lastUser":_userId,"lastSubmitted" : -1,"lastImg" : "NIL"});
   }).then(function(){
@@ -1171,7 +1044,7 @@ exports.swapScooter = function(req, res)
     return DBController.setScooterOBJ(_scooterId,{"status":"InUse","lastStatusChange":_nowTime,"action":-1,
     "lastUser":_userId,"lastSubmitted" : -1,"lastImg" : "NIL"});
   }).then(function(){
-    HardwareController.gpsHighRelayCommand(_scooterId);
+    HardwareController.gpsHighRelayCommand(accountGroup,_scooterId);
     res.json({"status":"OK"});
   }).catch(function(err){
     if(err == null || err == undefined)
@@ -1238,6 +1111,7 @@ exports.setUserProfile = function(req,res)
 exports.lightOff = function(req, res)
 {
   var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+  const accountGroup = req.session.accountGroup === undefined ? "NIL" : req.session.accountGroup;
   if(!req.query.userId){
     logger.catchFunc2(ip,"ERROR_MIS_PARM","/1.0/lightOff@1365","Error 1.0_1365",
       "There seems to be an issue with your request.Contact Telepod customer support for more information.",
@@ -1252,8 +1126,8 @@ exports.lightOff = function(req, res)
   }
   var _userId = req.query.userId;
   var _scooterId = req.query.scooterId;
-  logger.logAPICall(ip,"/1.0/lightOff@1378",[_userId,_scooterId],req.session.uid);
-  HardwareController.gpsLightOff(_scooterId).then(function(){
+  logger.logAPICall(ip,"/1.0/lightOff@1378",[accountGroup,_userId,_scooterId],req.session.uid);
+  HardwareController.gpsLightOff(accountGroup,_scooterId).then(function(){
     res.json({"status":"OK"});
   }).catch(function(e){
     logger.catchFunc2(ip,"ERROR","/1.0/lightOff@1382","Error 1.1382",
@@ -1265,6 +1139,7 @@ exports.lightOff = function(req, res)
 exports.lightOn = function(req, res)
 {
   const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+  const accountGroup = req.session.accountGroup === undefined ? "NIL" : req.session.accountGroup;
   if(!req.query.userId){
     logger.catchFunc2(ip,"ERROR_MIS_PARM","/1.0/lightOn@1392","Error 1.0_1392",
       "There seems to be an issue with your request.Contact Telepod customer support for more information.",
@@ -1279,8 +1154,8 @@ exports.lightOn = function(req, res)
   }
   var _userId = req.query.userId;
   var _scooterId = req.query.scooterId;
-  logger.logAPICall(ip,"/1.0/lightOn@1474",[_userId,_scooterId],req.session.uid);
-  HardwareController.gpsLightOn(_scooterId).then(function(){
+  logger.logAPICall(ip,"/1.0/lightOn@1474",[accountGroup,_userId,_scooterId],req.session.uid);
+  HardwareController.gpsLightOn(accountGroup,_scooterId).then(function(){
     res.json({"status":"OK"});
   }).catch(function(e){
     logger.catchFunc2(ip,"ERROR","/1.0/lightOn@1409","Error 1.1409",
@@ -1360,7 +1235,7 @@ exports.checkUserReferral = function(req, res)
 exports.unlockScooter = function(req, res)
 {
   var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-
+  const accountGroup = req.session.accountGroup === undefined ? "NIL" : req.session.accountGroup;
   if(!req.query.userId){
     logger.catchFunc2(ip,"ERROR_MIS_PARM","/1.0/unlockScooter@1553","Error 1.0_1553",
       "There seems to be an issue with your request.Contact Telepod customer support for more information.",
@@ -1378,8 +1253,8 @@ exports.unlockScooter = function(req, res)
   var _userId = req.query.userId;
   var _scooterId = req.query.scooterId;
 
-  logger.logAPICall(ip,"/1.0/unlockScooter@1569",[_userId,_scooterId],req.session.uid);
-  HardwareController.gpsHighRelayCommand(_scooterId).then(function(){
+  logger.logAPICall(ip,"/1.0/unlockScooter@1569",[accountGroup,_userId,_scooterId],req.session.uid);
+  HardwareController.gpsHighRelayCommand(accountGroup,_scooterId).then(function(){
     res.json({"status":"OK"});
   }).catch(function(e){
     logger.catchFunc2(ip,"ERROR","/1.0/unlockScooter@1573","Error 1.0_1573",
@@ -1391,7 +1266,7 @@ exports.unlockScooter = function(req, res)
 exports.lockScooter = function(req, res)
 {
   var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-
+  const accountGroup = req.session.accountGroup === undefined ? "NIL" : req.session.accountGroup;
   if(!req.query.userId){
     logger.catchFunc2(ip,"ERROR_MIS_PARM","/1.0/lockScooter@1584","Error 1.1584",
       "There seems to be an issue with your request.Contact Telepod customer support for more information.",
@@ -1409,8 +1284,8 @@ exports.lockScooter = function(req, res)
   var _userId = req.query.userId;
   var _scooterId = req.query.scooterId;
 
-  logger.logAPICall(ip,"/1.0/lockScooter@1600",[_userId,_scooterId],req.session.uid);
-  HardwareController.gpsLowRelayCommand(_scooterId).then(function(){
+  logger.logAPICall(ip,"/1.0/lockScooter@1600",[accountGroup,_userId,_scooterId],req.session.uid);
+  HardwareController.gpsLowRelayCommand(accountGroup,_scooterId).then(function(){
     res.json({"status":"OK"});
   }).catch(function(e){
     logger.catchFunc2(ip,"ERROR","/1.0/lockScooter@1604","Error 1.1604",
@@ -2054,7 +1929,7 @@ exports.authenticatePaymentIntent = function(req,res)
 
         return stripe.paymentIntents.create({
           description:"Customer credit card authentication",
-          amount: 500,
+          amount: _commonObj.stripeAuthAmount,
           customer: _customerObj.id,
           currency: _userObj.currency,
           payment_method: _creditCardToken,

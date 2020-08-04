@@ -7,10 +7,10 @@ var DBController = app_require('versions/1.0/DBController.js');
 
 var FCMOpsModel = app_require('versions/1.0/Model/FCMOperation.js');
 
-exports.gpsHighRelayCommand = function(scooterId)
+exports.gpsHighRelayCommand = function(_accountGroup,scooterId)
 {
   var deferred = Q.defer();
-  DBController.getScooterOBJ(scooterId).then(function(scooterObj){
+  DBController.getScooterOBJ(_accountGroup,scooterId).then(function(scooterObj){
     var _connectedHost = scooterObj.connectedHost;
     var _imei = scooterObj.IMEI;
     if(_connectedHost != undefined && _connectedHost != null && _connectedHost != "NIL")
@@ -31,36 +31,11 @@ exports.gpsHighRelayCommand = function(scooterId)
     return deferred.promise;
 };
 
-exports.whereCommand = function(scooterId)
+exports.gpsLowRelayCommand = function(_accountGroup,scooterId)
 {
     var deferred = Q.defer();
 
-    DBController.getScooterOBJ(scooterId).then(function(scooterObj){
-      var _connectedHost = scooterObj.connectedHost;
-      var _imei = scooterObj.IMEI;
-      if(_connectedHost != undefined && _connectedHost != null && _connectedHost != "NIL")
-      {
-        var client = request.createClient("http://"+_connectedHost+":3000/");
-        return client.get('where?IMEI=' + _imei);
-      }
-      else {
-        throw(logger.logErrorReport("ERROR","/1.0/whereCommand@44",[scooterId,_imei]));
-      }
-    }).then(function(){
-      deferred.resolve(logger.logErrorReport("OK","/1.0/whereCommand@47",[scooterId]));
-    }).catch(function(e){
-      logger.log("error",logger.logErrorReport("ERROR","/1.0/whereCommand@49",[e]));
-      deferred.resolve(logger.logErrorReport("OK","/1.0/whereCommand@50",[scooterId]));
-    });
-
-    return deferred.promise;
-};
-
-exports.gpsLowRelayCommand = function(scooterId)
-{
-    var deferred = Q.defer();
-
-    DBController.getScooterOBJ(scooterId).then(function(scooterObj){
+    DBController.getScooterOBJ(_accountGroup,scooterId).then(function(scooterObj){
       var _connectedHost = scooterObj.connectedHost;
       var _imei = scooterObj.IMEI;
       if(_connectedHost != undefined && _connectedHost != null && _connectedHost != "NIL")
@@ -81,11 +56,11 @@ exports.gpsLowRelayCommand = function(scooterId)
     return deferred.promise;
 };
 
-exports.buzzerOn = function(scooterId)
+exports.buzzerOn = function(_accountGroup,scooterId)
 {
     var deferred = Q.defer();
 
-    DBController.getScooterOBJ(scooterId).then(function(scooterObj){
+    DBController.getScooterOBJ(_accountGroup,scooterId).then(function(scooterObj){
       var _connectedHost = scooterObj.connectedHost;
       var _imei = scooterObj.IMEI;
       if(_connectedHost != undefined && _connectedHost != null && _connectedHost != "NIL")
@@ -106,60 +81,10 @@ exports.buzzerOn = function(scooterId)
     return deferred.promise;
 };
 
-exports.closeVibration = function(scooterId)
-{
-    var deferred = Q.defer();
-
-    DBController.getScooterOBJ(scooterId).then(function(scooterObj){
-      var _connectedHost = scooterObj.connectedHost;
-      var _imei = scooterObj.IMEI;
-      if(_connectedHost != undefined && _connectedHost != null && _connectedHost != "NIL")
-      {
-        var client = request.createClient("http://"+_connectedHost+":3000/");
-        return client.get('closeVibration?IMEI=' + _imei);
-      }
-      else {
-        throw(logger.logErrorReport("ERROR","/1.0/closeVibration@116",[scooterId,_imei]));
-      }
-    }).then(function(){
-      deferred.resolve(logger.logErrorReport("OK","/1.0/closeVibration@119",[scooterId]));
-    }).catch(function(e){
-      logger.log("error",logger.logErrorReport("ERROR","/1.0/closeVibration@121",[e]));
-      deferred.resolve(logger.logErrorReport("OK","/1.0/closeVibration@122",[scooterId]));
-    });
-
-    return deferred.promise;
-};
-
-exports.openVibration = function(scooterId)
-{
-    var deferred = Q.defer();
-
-    DBController.getScooterOBJ(scooterId).then(function(scooterObj){
-      var _connectedHost = scooterObj.connectedHost;
-      var _imei = scooterObj.IMEI;
-      if(_connectedHost != undefined && _connectedHost != null && _connectedHost != "NIL")
-      {
-        var client = request.createClient("http://"+_connectedHost+":3000/");
-        return client.get('openVibration?IMEI=' + _imei);
-      }
-      else {
-        throw(logger.logErrorReport("ERROR","/1.0/openVibration@139",[scooterId,_imei]));
-      }
-    }).then(function(){
-      deferred.resolve(logger.logErrorReport("OK","/1.0/openVibration@143",[scooterId]));
-    }).catch(function(e){
-      logger.log("error",logger.logErrorReport("ERROR","/1.0/openVibration@145",[e]));
-      deferred.resolve(logger.logErrorReport("OK","/1.0/openVibration@146",[scooterId]));
-    });
-
-    return deferred.promise;
-};
-
-exports.gpsLightOff = function(scooterId) //GEN 3
+exports.gpsLightOff = function(_accountGroup,scooterId) //GEN 3
 {
   const deferred = Q.defer();
-  DBController.getScooterOBJ(scooterId).then(function(scooterObj){
+  DBController.getScooterOBJ(_accountGroup,scooterId).then(function(scooterObj){
     var _connectedHost = scooterObj.connectedHost;
     if(_connectedHost != undefined && _connectedHost != null && _connectedHost != "NIL")
     {
@@ -178,10 +103,10 @@ exports.gpsLightOff = function(scooterId) //GEN 3
     return deferred.promise;
 };
 
-exports.gpsLightOn = function(scooterId) //GEN 3
+exports.gpsLightOn = function(_accountGroup,scooterId) //GEN 3
 {
   const deferred = Q.defer();
-  DBController.getScooterOBJ(scooterId).then(function(scooterObj){
+  DBController.getScooterOBJ(_accountGroup,scooterId).then(function(scooterObj){
     var _connectedHost = scooterObj.connectedHost;
     if(_connectedHost != undefined && _connectedHost != null && _connectedHost != "NIL")
     {
@@ -200,44 +125,6 @@ exports.gpsLightOn = function(scooterId) //GEN 3
     return deferred.promise;
 };
 
-exports.getFCMNotificationKey = function(_accountGroup)
-{
-  var deferred = Q.defer();
-  var timeout = setTimeout(function() {
-    logger.log("info",logger.logErrorReport("ERROR_TIMEOUT","/1.0/getFCMNotificationKey@241",[_accountGroup]));
-    deferred.reject();
-  }, 10000);
-
-  try {
-    var client = request.createClient(telepodDetails.fcmDomain);
-    client.headers['Authorization'] = 'key=' + telepodDetails.FCMServerKey;
-    client.headers['Content-Type'] = "application/json";
-    client.headers['project_id'] = telepodDetails.FCMSenderId;
-
-    client.get('notification?notification_key_name=' + _accountGroup).then(function(objreply){
-      clearTimeout(timeout);
-      if(objreply.res.statusCode >= 300)
-      {
-        deferred.reject();
-      }
-      else if (objreply.res.statusCode < 300 && objreply.res.statusCode >= 200){
-        deferred.resolve(objreply.body);
-      }
-      else {
-        deferred.reject();
-      }
-    }).catch(function(error){
-      clearTimeout(timeout);
-      throw(logger.logErrorReport("ERROR","/1.0/getFCMNotificationKey@262",[error]));
-    });
-  } catch (e) {
-    clearTimeout(timeout);
-    logger.log("error",logger.logErrorReport("ERROR","/1.0/getFCMNotificationKey@266",[e]));
-    deferred.reject();
-  }
-
-  return deferred.promise;
-}
 
 exports.createFCMDeviceGroup = function(_accountGroup,_arrayOfRegistrationId)
 {

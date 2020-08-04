@@ -2,7 +2,6 @@ class Trip
 {
   constructor()
   {
-    ///this.tripId = "NIL";
     this.userId = "NIL";
     this.scooterId = "NIL";
     this.IMEI = "NIL";
