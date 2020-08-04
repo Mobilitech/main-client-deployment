@@ -1520,118 +1520,6 @@ exports.convertUserDepositToCredit = function(userId,_accountGroup)
 	return deferred.promise;
 }
 
-/* exports.createScooterReport = function(_userId,_scooterId,_locationUser,_message,_typeOfIssue){
-  const deferred = Q.defer();
-  const db = dbUtil.admin.database();
-  const scooterReportsRef = db.ref("ScootersReports");
-  const nowTime = parseInt((new Date().getTime())/1000);
-
-  var outerShell = {};
-  var innerShell = {};
-  innerShell["userId"] = _userId;
-  innerShell["scooterId"] = _scooterId;
-  innerShell["locationUser"] = _locationUser;
-  innerShell["message"] = _message;
-  innerShell["typeOfIssue"] = _typeOfIssue;
-
-  outerShell[nowTime] = innerShell;
-
-  scooterReportsRef.update(outerShell).then(function(){
-    deferred.resolve({"status":"OK"});
-  }).catch(function(err){
-    logger.log("error",logger.logErrorReport("ERROR","/1.0/createScooterReport@2036",[err]));
-    deferred.reject();
-  })
-
-  return deferred.promise;
-}
- */
-/* exports.getNearbyStations = function(radiusKM,stationLocation){
-  const deferred = Q.defer();
-  const db = dbUtil.admin3.database();
-  const stationRef = db.ref("StationsGeoFire");
-  const geoFire = new GeoFire(stationRef);
-  var arr = [];
-
-  var geoQuery = geoFire.query({
-    center: [parseFloat(stationLocation[0]),parseFloat(stationLocation[1])],
-    radius: radiusKM
-  });
-
-  geoQuery.on("key_entered", function(key, location, distance) {
-    arr.push({"stationId":key,"distance":distance*1000});
-  });
-
-  geoQuery.on("ready", function() {
-    geoQuery.cancel();
-    var arrayToReturn = [];
-    var promiseToReturn = [];
-    var arrayToProcess = [];
-
-    arr.sort(function(a,b){return a.distance - b.distance});
-    arr.forEach(function(item,index){
-      arrayToProcess.push(item.stationId);
-    });
-
-    dd.getUserStations().then(function(arr2)
-    {
-      arr2.forEach(function(item,index){
-        if(arrayToProcess.includes(item.stationId))
-        {
-          var arrayIndexNum = arrayToProcess.indexOf(item.stationId);
-
-          Object.assign(item, {"distance":arr[arrayIndexNum].distance});
-          arrayToReturn.push(item);
-        }
-        promiseToReturn.push(deferred.promise);
-      });
-    }).catch(function(err){
-      logger.catchFunc(ip,"ERROR","/1.0/getNearbyStations@2083",res,204,"");
-    });
-
-    Q.all(promiseToReturn).then(function(){
-      arrayToReturn.sort(function(a,b){return a.distance - b.distance});
-      deferred.resolve(arrayToReturn);
-    }).catch(function(err){
-      logger.log("error",logger.logErrorReport("ERROR","/1.0/getNearbyStations@2090",["NIL"]));
-      deferred.reject();
-    });
-  });
-  return deferred.promise;
-} */
-
-/* exports.getUserStations = function()
-{
-  const deferred = Q.defer();
-  var stationToRet = [];
-  
-	const stationGlobal = dbUtil.getStation3Global();
-  const stationList = dbUtil.getUserStations3Global();
-
-  for(var stationKey in stationGlobal)
-  {
-    if(stationList.includes(stationKey))
-    {
-      var stationObjectToStore = {};
-
-			stationObjectToStore["stationId"] = stationKey;
-			stationObjectToStore["Lat"] = stationGlobal[stationKey]["l"][0];
-			stationObjectToStore["Lng"] = stationGlobal[stationKey]["l"][1];
-			stationObjectToStore["dockingAvail"] = stationGlobal[stationKey]["dockingAvail"];
-			stationObjectToStore["scooterAvail"] = stationGlobal[stationKey]["scooterAvail"];
-			stationObjectToStore["scooterBatteryLow"] = stationGlobal[stationKey]["scooterBatteryLow"];
-			stationObjectToStore["stationName"] = stationGlobal[stationKey]["stationName"];
-      stationObjectToStore["subStationName"] = (stationGlobal[stationKey]["stationName"] === undefined) ? "NIL" : stationGlobal[stationKey]["subStationName"];
-      stationObjectToStore["img"] = (stationGlobal[stationKey]["img"] === undefined) ? [] : stationGlobal[stationKey]["img"];
-      stationObjectToStore["vrImg"] = (stationGlobal[stationKey]["vrImg"] === undefined) ? [] : stationGlobal[stationKey]["vrImg"];
-
-      stationToRet.push(stationObjectToStore);
-    }
-  }
-  deferred.resolve(stationToRet);
-  return deferred.promise;
-} */
-
 exports.setRefundReasons = function(userId,arrayRefundComment,_accountGroup)
 {
 	var deferred = Q.defer();
@@ -1680,3 +1568,35 @@ exports.getUserTransactions = function(userId,_limit,_accountGroup)
   });
     return deferred.promise;
 };
+
+exports.getZoneOBJ = function(_accountGroup,_zoneId){
+	const deferred = Q.defer();
+  var db = dbUtil.admin3.database();
+  const zoneRef = _accountGroup === undefined || _accountGroup === "NIL" ? 
+    db.ref("Zone") : db.ref(_accountGroup).child("Zone");
+
+  try{
+    zoneRef.child(_zoneId).once("value").then(function(childSnapShot){
+      if (!childSnapShot.exists())
+      {
+        throw (logger.logErrorReport("ERROR","/1.0/getZoneOBJ@1582",[_zoneId,_accountGroup]));
+      }
+      else
+      {
+        var _zoneObj = new zoneModel();
+        Object.assign(_zoneObj,childSnapShot.val());
+        deferred.resolve(_zoneObj);
+      }
+    }).catch(function(e){
+      logger.log("error",logger.logErrorReport("ERROR","/1.0/getZoneOBJ@1591",[e]));
+      deferred.reject();
+    })
+  }
+  catch(e)
+  {
+    logger.log("error",logger.logErrorReport("ERROR","/1.0/getZoneOBJ@1597",[e]));
+    deferred.reject();
+  }
+  
+  return deferred.promise;
+}

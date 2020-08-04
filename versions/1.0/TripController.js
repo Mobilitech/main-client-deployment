@@ -47,15 +47,15 @@ exports.quickBook = function(userId,scooterId,stationId,userLat,userLng,userPaym
   var fScooterBattery;
 
   var promises = [tripRef.orderByChild("bookingTime").limitToLast(1).once("value"),
-                  usersRef.once("value"),
-                  dbController.getStationOBJ(stationId,_accountGroup),
-                  dbController.getScooterOBJ(_accountGroup,scooterId),
-                  tripQueueRef.once("value")];
+    usersRef.once("value"),
+    dbController.getStationOBJ(stationId,_accountGroup),
+    dbController.getScooterOBJ(_accountGroup,scooterId),
+    tripQueueRef.once("value")];
 
     Q.all(promises).then(function(tell){
       if(!tell[1].exists())
       {
-        throw(logger.logErrorReport("ERROR","/1.0/quickBook@61",[userId,scooterId,stationId,userLat,
+        throw(logger.logErrorReport("ERROR","/1.0/quickBook@58",[userId,scooterId,stationId,userLat,
           userLng,userPaymentType,userSaveCreditCard]));
       }
       var _previousTripId = tell[0].exists() ? Object.keys(tell[0].val())[0] : "NIL";
@@ -79,7 +79,7 @@ exports.quickBook = function(userId,scooterId,stationId,userLat,userLng,userPaym
       Object.assign(_zoneObj,{"zoneId":"NIL"});
       if(tell[4].exists())
       {
-        throw(logger.logErrorReport("ERROR_INUSE","/1.0/quickBook@462",[userId,scooterId,stationId,userLat,
+        throw(logger.logErrorReport("ERROR_INUSE","/1.0/quickBook@82",[userId,scooterId,stationId,userLat,
           userLng,userPaymentType]));
       }
       else if(_stationObj.zoneId !== "NIL")
@@ -95,45 +95,45 @@ exports.quickBook = function(userId,scooterId,stationId,userLat,userLng,userPaym
             return _zoneObj;
           }
         }).catch(function(e){
-          return true;
+          return _zoneObj;
         });
       }
       else
       {
-        throw(logger.logErrorReport("ERROR_ZONE_SUSPENDED","/1.0/quickBook@107",[userId,scooterId,stationId,
+        throw(logger.logErrorReport("ERROR_ZONE_SUSPENDED","/1.0/quickBook@103",[userId,scooterId,stationId,
           userLat,userLng,userPaymentType]));
       }
     }).then(function(){
       
       if(_zoneObj.isSuspended || _zoneObj.zoneId === "NIL")
       {
-        throw(logger.logErrorReport("ERROR_ZONE_SUSPENDED","/1.0/quickBook@114",[userId,scooterId,stationId,
-          userLat,userLng,userPaymentType]));
+        throw(logger.logErrorReport("ERROR_ZONE_SUSPENDED","/1.0/quickBook@110",[userId,scooterId,stationId,
+          userLat,userLng,userPaymentType,_zoneObj.isSuspended,_zoneObj.zoneId]));
       }
-      else if(_gpsObj.status != "Available" && _gpsObj.status != "LTD")
+      else if(_gpsObj.status !== "Available" && _gpsObj.status !== "LTD")
       {
-        throw(logger.logErrorReport("ERROR","/1.0/quickBook@106",[userId,scooterId,stationId,userLat,
-          userLng,userPaymentType]));
+        throw(logger.logErrorReport("ERROR","/1.0/quickBook@115",[userId,scooterId,stationId,userLat,
+          userLng,userPaymentType,_gpsObj.status]));
       }
       else if((fScooterBattery >= 35) &&
-              ((_previousTripObj.status == "TRIP_STARTED") || (_previousTripObj.status == "MULTI_TRIP_STARTED") ||
-              (_previousTripObj.status == "CANCELLED") || (_previousTripObj.status == "EXPIRED")  ||
-              (_previousTripObj.status == "DROPOFF_RETURNED") || (_previousTripObj.status == "DROPOFF_COMPLETION") ||
-              (_previousTripObj.status == "COMPLETED")))
+              ((_previousTripObj.status === "TRIP_STARTED") || (_previousTripObj.status === "MULTI_TRIP_STARTED") ||
+              (_previousTripObj.status === "CANCELLED") || (_previousTripObj.status === "EXPIRED")  ||
+              (_previousTripObj.status === "DROPOFF_RETURNED") || (_previousTripObj.status === "DROPOFF_COMPLETION") ||
+              (_previousTripObj.status === "COMPLETED")))
       {  
-        return dbController.getUserActivePass(userId,_accountGroup).catch(function(err){
+        return dbController.getUserActivePass(userId,_accountGroup).catch(function(){
           return [];
         });
       }
       else
       {
-        throw(logger.logErrorReport("ERROR","/1.0/quickBook@121",[userId,scooterId,fScooterBattery,
+        throw(logger.logErrorReport("ERROR","/1.0/quickBook@130",[userId,scooterId,fScooterBattery,
           stationId,userLat,userLng,userPaymentType]));
       }
     }).then(function(userPass){
       if(userPass.length > 0 || userHasCreditsAndDeposit || userPaymentType === "creditCard")
       {
-        userPassTransactionId = userPass.length != 0 ? userPass[0].transactionId : "NIL";
+        userPassTransactionId = userPass.length !== 0 ? userPass[0].transactionId : "NIL";
         return true;
       }
       else {
@@ -296,7 +296,7 @@ exports.qrDocklessDropCheck = function(userId,userTripId,qrString,userLat,userLn
       throw(logger.logErrorReport("ERROR_FAR","/1.0/qrDocklessDropCheck@350",
       [userId,userTripId,qrString,userLat,userLng,_userToStationDist,_scooterToStationDist]));
     }
-  }).then(function(useractivearray){ //for trip with  passes
+  }).then(function(useractivearray){ //for trip with passes
     if(useractivearray.passId !== undefined)
     {
       Object.assign(_userTransactionObj,useractivearray);
@@ -313,18 +313,34 @@ exports.qrDocklessDropCheck = function(userId,userTripId,qrString,userLat,userLn
   }).then(function(){ // check user's location to found station.
     dropOffStationName = isQRStation ? _userDropOffStation.stationName : _userTripObj.pickUpStationName;
     dropOffStationId = isQRStation ? _userDropOffStation.stationId : _userTripObj.pickUpStationId;
-    return dbController.getNearbyZones(_userTripObj.userLocationAtBooking[0],_userTripObj.userLocationAtBooking[1],6,_accountGroup) //for pickup zone
+    return dbController.getZoneOBJ(_accountGroup,_userTripObj.pickUpZoneId).then(function(_zoneObjRecv){
+      var _zoneObjRecvTemp = new zoneModel();
+      Object.assign(_zoneObjRecvTemp,{"zoneId":_userTripObj.pickUpZoneId});
+      return _zoneObjRecvTemp;
+    });
   }).then(function(pickUpZoneOBJ){
-    pickUpZoneId = pickUpZoneOBJ.length != 0 ? pickUpZoneOBJ[0].zoneId : _userTripObj.pickUpZoneId;
-    pickUpZoneFare = pickUpZoneOBJ.length != 0 ? pickUpZoneOBJ[0].zoneFare : _userTripObj.pickUpZoneFare;
-    pickUpZoneTimeBlock = pickUpZoneOBJ.length != 0 ? pickUpZoneOBJ[0].zoneTimeBlock : _userTripObj.pickUpZoneTimeBlock;
-    pickUpIsExclusive = pickUpZoneOBJ.length != 0 ? pickUpZoneOBJ[0].isExclusive : false;
-    return dbController.getNearbyZones(userLat,userLng,6,_accountGroup) //for dropOff Zone
+    pickUpZoneId = pickUpZoneOBJ.zoneId !== "NIL" ? pickUpZoneOBJ.zoneId : _userTripObj.pickUpZoneId;
+    pickUpZoneFare = pickUpZoneOBJ.zoneId !== "NIL" ? pickUpZoneOBJ.zoneFare : _userTripObj.pickUpZoneFare;
+    pickUpZoneTimeBlock = pickUpZoneOBJ.zoneId !== "NIL" ? pickUpZoneOBJ.zoneTimeBlock : _userTripObj.pickUpZoneTimeBlock;
+    pickUpIsExclusive = pickUpZoneOBJ.zoneId !== "NIL" ? pickUpZoneOBJ.isExclusive : false;
+    if(isQRStation)
+    {
+      return dbController.getZoneOBJ(_accountGroup,_userDropOffStation.zoneId).then(function(_zoneObjRecv){
+        var _zoneObjRecvTemp = new zoneModel();
+        Object.assign(_zoneObjRecvTemp,{"zoneId":_userDropOffStation.zoneId});
+        return _zoneObjRecvTemp;
+      });
+    }
+    else
+    {
+      var _zoneObjRecvTemp = new zoneModel();
+      return _zoneObjRecvTemp;
+    }
   }).then(function(dropOffZoneOBJ){
-    dropOffZoneId = dropOffZoneOBJ.length !== 0 ? dropOffZoneOBJ[0].zoneId : _userTripObj.pickUpZoneId;
-    dropOffIsExclusive = dropOffZoneOBJ.length !== 0 ? dropOffZoneOBJ[0].isExclusive : false;
+    dropOffZoneId = dropOffZoneOBJ.zoneId !== "NIL" ? dropOffZoneOBJ.zoneId : _userTripObj.pickUpZoneId;
+    dropOffIsExclusive = dropOffZoneOBJ.zoneId !== "NIL" ? dropOffZoneOBJ.isExclusive : false;
 
-    if((pickUpIsExclusive) && (pickUpZoneId != dropOffZoneId))
+    if((pickUpIsExclusive) && (pickUpZoneId !== dropOffZoneId))
     {
       throw(logger.logErrorReport("ERROR_DIST","/1.0/CountryControllers/SGPControllers/qrDocklessDropCheck@247",
         [userId,userTripId,qrString,userLat,userLng,dropOffStationId]));
@@ -365,10 +381,12 @@ exports.qrDocklessDropCheck = function(userId,userTripId,qrString,userLat,userLn
     if(isQRStation)
     {
       return dbController.setStationOBJ(dropOffStationId,{"scooterAvail":++_userDropOffStation.scooterAvail},
-        _accountGroup);
+      _accountGroup).catch(function(){
+        return true;
+      });
     }
     else
-    {;
+    {
       return true;
     }
   }).then(function(){
@@ -376,7 +394,6 @@ exports.qrDocklessDropCheck = function(userId,userTripId,qrString,userLat,userLn
       "credits": _userObj.credits - totalFare
     });
     return dbController.setUserOBJ(userId,_userObj,_accountGroup);
-
   }).then(function(){
     Object.assign(_userTripObj,{
       "country": _userObj.country,
