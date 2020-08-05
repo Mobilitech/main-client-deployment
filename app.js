@@ -156,7 +156,7 @@ app.post("/v1.0/stripe/authenticate",checkSessionToken,apiControllerV1_0.authent
 app.post("/v1.0/stripe/pay",checkSessionToken,apiControllerV1_0.createPaymentIntent);
 
 app.get('/version',checkSessionToken,function(req, res){
-  res.json({"version":"v1.0.0"});
+  res.json({"version":"v1.0.1"});
 });
 
 /*Error catcher*/
