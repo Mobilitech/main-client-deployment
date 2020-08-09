@@ -13,6 +13,9 @@ const stationModel = app_require('versions/1.0/Model/Station.js');
 const zoneModel = app_require('versions/1.0/Model/Zone.js');
 const transactionModel = app_require('versions/1.0/Model/Transaction.js');
 const passModel = app_require('versions/1.0/Model/Pass.js');
+const commonModel = app_require('versions/1.0/Model/Common.js');
+const paymentMethodModel = app_require('versions/1.0/Model/PaymentMethod.js');
+const paymentIntentModel = app_require('versions/1.0/Model/PaymentIntent.js'); 
 
 var hardware = app_require('versions/1.0/AppHardwareController.js');
 var dbController = app_require('versions/1.0/DBController.js');
@@ -192,12 +195,22 @@ exports.quickBook = function(userId,scooterId,stationId,userLat,userLng,userPaym
 exports.qrDocklessDropCheck = function(userId,userTripId,qrString,userLat,userLng,_accountGroup)
 {
   const deferred = Q.defer();
+  var stripe;
+  const db = dbUtil.admin.database();
+  const commonRef = _accountGroup === "NIL" ? db.ref("Common") :
+    db.ref(_accountGroup).child("Common");
+  const transactionRef = _accountGroup === "NIL" ? db.ref("Transactions") : 
+    db.ref(_accountGroup).child("Transactions");
+
+  var _commonObj = new commonModel();
   var _userTripObj = new tripModel();
   var _userObj = new userModel();
   var _userDropOffStation = new stationModel();
   var _gpsObj = new gpsModel();
   var _userTransactionObj = new transactionModel();
   var _userPassObj = new passModel();
+  var _userPaymentMethod = new paymentMethodModel();
+  var _userPaymentIntent = new paymentIntentModel();
 
   var dropOffStationId;
   var dropOffZoneId;
@@ -315,7 +328,7 @@ exports.qrDocklessDropCheck = function(userId,userTripId,qrString,userLat,userLn
     dropOffStationId = isQRStation ? _userDropOffStation.stationId : _userTripObj.pickUpStationId;
     return dbController.getZoneOBJ(_accountGroup,_userTripObj.pickUpZoneId).then(function(_zoneObjRecv){
       var _zoneObjRecvTemp = new zoneModel();
-      Object.assign(_zoneObjRecvTemp,{"zoneId":_userTripObj.pickUpZoneId});
+      Object.assign(_zoneObjRecvTemp,_zoneObjRecv,{"zoneId":_userTripObj.pickUpZoneId});
       return _zoneObjRecvTemp;
     });
   }).then(function(pickUpZoneOBJ){
@@ -355,64 +368,221 @@ exports.qrDocklessDropCheck = function(userId,userTripId,qrString,userLat,userLn
         return dbController.removeTripQueue(_userTripObj.scooterId,_accountGroup).then(function(){
           hardware.gpsLowRelayCommand(_accountGroup,_userTripObj.scooterId);
           return true;
-        }).then(function(){
-          return dbController.setGPSOBJ(_gpsObj.IMEI,{"stationId":dropOffStationId,
-            "lastStatusChange":returnTime,"totalUsageTime":_gpsObj.totalUsageTime,
-            "lat":parseFloat(userLat),"lng":parseFloat(userLng),"lastUsed":returnTime,"status":"Available"});
-        }).then(function(){
-          if(_userTransactionObj.passId !== "NIL")
-          {//means have pass covering this trip...
-            var _userPassEndTime = _userTransactionObj.paymentTime + _userPassObj.passDuration
-            var _hasPassExpired = _userPassEndTime >= returnTime ? false:true;
-            var _passExpiryElapsedTime = _hasPassExpired ? returnTime - _userPassEndTime : 0;
-            return algorithm.getFareZone(_passExpiryElapsedTime,pickUpZoneFare,pickUpZoneTimeBlock);
-          }
-          else
-          {
-            return algorithm.getFareZone(totalTime,pickUpZoneFare,pickUpZoneTimeBlock);
-          }
         }).catch(function(err){
-          throw(logger.logErrorReport("ERROR","/1.0/qrDocklessDropCheck@370",
-            [userId,userTripId,qrString,userLat,userLng,err]));
+          logger.log("info",logger.logErrorReport("NO_TRIP_QUEUE","/1.0/qrDocklessDropCheck@359",[err]));
+          return true;
         });
+    }
+  }).then(function(){
+    return dbController.setGPSOBJ(_gpsObj.IMEI,{"stationId":dropOffStationId,
+        "lastStatusChange":returnTime,"totalUsageTime":_gpsObj.totalUsageTime,
+        "lat":parseFloat(userLat),"lng":parseFloat(userLng),"lastUsed":returnTime,"status":"Available"})
+    .then(function(){
+      
+      if(_userTransactionObj.passId !== "NIL")
+      {//means have pass covering this trip...
+        var _userPassEndTime = _userTransactionObj.paymentTime + _userPassObj.passDuration
+        var _hasPassExpired = _userPassEndTime >= returnTime ? false:true;
+        var _passExpiryElapsedTime = _hasPassExpired ? returnTime - _userPassEndTime : 0;
+        return algorithm.getFareZone(_passExpiryElapsedTime,pickUpZoneFare,pickUpZoneTimeBlock);
       }
+      else
+      {
+        return algorithm.getFareZone(totalTime,pickUpZoneFare,pickUpZoneTimeBlock);
+      }
+    }).catch(function(err){
+      throw(logger.logErrorReport("ERROR","/1.0/qrDocklessDropCheck@380",
+        [userId,userTripId,qrString,userLat,userLng,err]));
+    });
   }).then(function(fareData){ //Pricing-matters fall in here
     totalFare = fareData.fareInCents + etcFare;
-    if(isQRStation)
-    {
-      return dbController.setStationOBJ(dropOffStationId,{"scooterAvail":++_userDropOffStation.scooterAvail},
-      _accountGroup).catch(function(){
-        return true;
+
+    var _commonCountry = _userObj.country === "NIL" ? "DEF" : _userObj.country;
+    return commonRef.child(_commonCountry).once("value").then(function(_commonSnapshot){
+      if(_commonSnapshot.exists())
+      {
+        return _commonSnapshot.val();
+      }
+      else
+      {
+        return new commonModel();
+      }
+    }).catch(function(err){
+      logger.log("info",logger.logErrorReport("NO_COMMON_FOUND","/1.0/qrDocklessDropCheck@397",[err]));
+      return new commonModel();
+    });
+  }).then(function(_commonObjRecv){
+    Object.assign(_commonObj,_commonObjRecv);
+    if(_commonObj.stripeSecretKey === "NIL" || _commonObj.stripePublishKey === "NIL" ||
+    _userObj.currency === "NIL" || _userObj.country === "NIL" || totalFare <= 0 ||
+    _userObj.creditCardToken === "NIL")
+    {// means stripe not available or no FARE or no credit card Token - just deduct from user's credit
+      if(isQRStation)
+      {
+        dbController.setStationOBJ(dropOffStationId,{"scooterAvail":++_userDropOffStation.scooterAvail},
+        _accountGroup);
+      }
+      Object.assign(_userObj,{
+        "credits": _userObj.credits - totalFare
+      });
+      dbController.setUserOBJ(userId,_userObj,_accountGroup).then(function(){
+        Object.assign(_userTripObj,{
+          "country": _userObj.country,
+          "currency": _userObj.currency,
+          "userLocationAtDropOff":_userLocationAtDropOff,
+          "status":"DROPOFF_COMPLETION", //DROPOFF_RETURNED FOR PHOTO-TAKING
+          "etcFare":etcFare,
+          "totalDuration":totalTime,
+          "totalFare":totalFare,
+          "isDropOffInOperatingZone":isUserInOperatingZone,
+          "isDropOffInStation":isUserWithinStation,
+          "dropOffStationId" : dropOffStationId,
+          "dropOffStationName" : dropOffStationName,
+          "dropOffZoneId" : dropOffZoneId,
+          "dropOffTime": returnTime,
+        });
+        return dbController.setTripOBJ(userId,userTripId,_userTripObj,_accountGroup);
+      }).then(function(){
+        deferred.resolve({"status":"OK","tripStatus":"DROPOFF_COMPLETION"});
       });
     }
     else
     {
-      return true;
+      stripe = require("stripe")(_commonObj.stripeSecretKey);
+      var _totalFareLeft = _userObj.credits - totalFare;
+      if(_totalFareLeft < 0) // call stripe......
+      {
+        stripe.paymentIntents.create({
+          description: "Trip Payment for User " + userId,
+          amount: (_totalFareLeft*-1),
+          customer: _userObj.customerId,
+          currency: _userObj.currency,
+          payment_method: _userObj.creditCardToken,
+          confirm: true,
+          metadata:{
+            "userId":userId,
+            "tripId":userTripId
+          }
+        }).then(function(_paymentIntentObj){
+          Object.assign(_userPaymentIntent,_paymentIntentObj);
+          if(_userPaymentIntent.status === "succeeded")
+          {
+            //fetch the payment method object here
+            return stripe.paymentMethods.retrieve(_userPaymentIntent.payment_method).catch(function(e){
+              logger.log("info",logger.logErrorReport("ERROR","/1.0/qrDocklessDropCheck@470",[e]));
+              return new paymentMethodModel();
+            });
+          }
+          else
+          {
+            throw(logger.logErrorReport("ERROR_PAYMENT","/1.0/qrDocklessDropCheck@476",
+              [_userId,_userPaymentIntent.status,accountGroup]));
+          }
+        }).then(function(_paymentMethod){
+          Object.assign(_userPaymentMethod,_paymentMethod);
+          Object.assign(_userObj,{
+            "credits" : parseInt(0),
+            "creditCardToken":_userPaymentIntent.payment_method,
+            "creditCardType":_paymentMethod.card.brand === "NIL" ? _userObj.creditCardType : _paymentMethod.card.brand,
+            "creditCardNumber":_paymentMethod.card.last4 === "NIL" ? _userObj.saveCreditCard : _paymentMethod.card.last4,
+            "creditCardUID":_paymentMethod.card.fingerprint === "NIL" ? _userObj.creditCardUID : _paymentMethod.card.fingerprint
+          });
+          return dbController.setUserOBJ(userId,_userObj,_accountGroup);
+        }).then(function(){
+          Object.assign(_userTripObj,{
+            "country": _userObj.country,
+            "currency": _userObj.currency,
+            "userLocationAtDropOff":_userLocationAtDropOff,
+            "status":"DROPOFF_COMPLETION", //DROPOFF_RETURNED FOR PHOTO-TAKING
+            "etcFare":etcFare,
+            "totalDuration":totalTime,
+            "totalFare":totalFare,
+            "isDropOffInOperatingZone":isUserInOperatingZone,
+            "isDropOffInStation":isUserWithinStation,
+            "dropOffStationId" : dropOffStationId,
+            "dropOffStationName" : dropOffStationName,
+            "dropOffZoneId" : dropOffZoneId,
+            "dropOffTime": returnTime,
+          });
+          return dbController.setTripOBJ(userId,userTripId,_userTripObj,_accountGroup);
+        }).then(function(){
+          var _transactionTemp = new transactionModel();
+          Object.assign(_transactionTemp,{
+            "creditCardToken":_userObj.creditCardToken,
+            "creditCardType":_userObj.creditCardType,
+            "creditCardNumber":_userObj.creditCardNumber,
+            "paymentAmount":parseInt(_totalFareLeft*-1),
+            "paymentType": 6,
+            "country":_userObj.country,
+            "currency":_userObj.currency
+          })
+          return transactionRef.child(userId).child(_userPaymentIntent.id).update(_transactionTemp);
+        }).then(function(){
+          deferred.resolve({"status":"OK","tripStatus":"DROPOFF_COMPLETION"});
+        }).catch(function(err){
+          logger.log("info",logger.logErrorReport("ERROR_STRIPE_CHARGE_FAILED","/1.0/qrDocklessDropCheck@464",[err]));
+          if(isQRStation)
+          {
+            dbController.setStationOBJ(dropOffStationId,{"scooterAvail":++_userDropOffStation.scooterAvail},
+            _accountGroup);
+          }
+          Object.assign(_userObj,{
+            "credits": _userObj.credits - totalFare
+          });
+          dbController.setUserOBJ(userId,_userObj,_accountGroup).then(function(){
+            Object.assign(_userTripObj,{
+              "country": _userObj.country,
+              "currency": _userObj.currency,
+              "userLocationAtDropOff":_userLocationAtDropOff,
+              "status":"DROPOFF_COMPLETION", //DROPOFF_RETURNED FOR PHOTO-TAKING
+              "etcFare":etcFare,
+              "totalDuration":totalTime,
+              "totalFare":totalFare,
+              "isDropOffInOperatingZone":isUserInOperatingZone,
+              "isDropOffInStation":isUserWithinStation,
+              "dropOffStationId" : dropOffStationId,
+              "dropOffStationName" : dropOffStationName,
+              "dropOffZoneId" : dropOffZoneId,
+              "dropOffTime": returnTime,
+            });
+            return dbController.setTripOBJ(userId,userTripId,_userTripObj,_accountGroup);
+          }).then(function(){
+            deferred.resolve({"status":"OK","tripStatus":"DROPOFF_COMPLETION"});
+          });
+        });
+      }
+      else // just end..
+      {
+        if(isQRStation)
+        {
+          dbController.setStationOBJ(dropOffStationId,{"scooterAvail":++_userDropOffStation.scooterAvail},
+          _accountGroup);
+        }
+        Object.assign(_userObj,{
+          "credits": _userObj.credits - totalFare
+        });
+        dbController.setUserOBJ(userId,_userObj,_accountGroup).then(function(){
+          Object.assign(_userTripObj,{
+            "country": _userObj.country,
+            "currency": _userObj.currency,
+            "userLocationAtDropOff":_userLocationAtDropOff,
+            "status":"DROPOFF_COMPLETION", //DROPOFF_RETURNED FOR PHOTO-TAKING
+            "etcFare":etcFare,
+            "totalDuration":totalTime,
+            "totalFare":totalFare,
+            "isDropOffInOperatingZone":isUserInOperatingZone,
+            "isDropOffInStation":isUserWithinStation,
+            "dropOffStationId" : dropOffStationId,
+            "dropOffStationName" : dropOffStationName,
+            "dropOffZoneId" : dropOffZoneId,
+            "dropOffTime": returnTime,
+          });
+          return dbController.setTripOBJ(userId,userTripId,_userTripObj,_accountGroup);
+        }).then(function(){
+          deferred.resolve({"status":"OK","tripStatus":"DROPOFF_COMPLETION"});
+        });
+      }
     }
-  }).then(function(){
-    Object.assign(_userObj,{
-      "credits": _userObj.credits - totalFare
-    });
-    return dbController.setUserOBJ(userId,_userObj,_accountGroup);
-  }).then(function(){
-    Object.assign(_userTripObj,{
-      "country": _userObj.country,
-      "currency": _userObj.currency,
-      "userLocationAtDropOff":_userLocationAtDropOff,
-      "status":"DROPOFF_COMPLETION", //DROPOFF_RETURNED FOR PHOTO-TAKING
-      "etcFare":etcFare,
-      "totalDuration":totalTime,
-      "totalFare":totalFare,
-      "isDropOffInOperatingZone":isUserInOperatingZone,
-      "isDropOffInStation":isUserWithinStation,
-      "dropOffStationId" : dropOffStationId,
-      "dropOffStationName" : dropOffStationName,
-      "dropOffZoneId" : dropOffZoneId,
-      "dropOffTime": returnTime,
-    });
-    return dbController.setTripOBJ(userId,userTripId,_userTripObj,_accountGroup);
-  }).then(function(){
-    deferred.resolve({"status":"OK","tripStatus":"DROPOFF_COMPLETION"});
   }).catch(function(err){
     logger.log("error",logger.logErrorReport("ERROR","/1.0/qrDocklessDropCheck@419",[err]));
     deferred.reject(err);
@@ -459,7 +629,7 @@ exports.getBestScooters = function(qrScooterId,userLat,userLng,userId,_accountGr
   const gpsRef = db.ref("GPS");
   const userRef = _accountGroup === undefined || _accountGroup === "NIL" ? db.ref("Users") :
     db.ref(_accountGroup).child("Users");
-  var scooterBatteryLevel;
+  var scooterBatteryLevel = 0;
   var _scooterObj = new gpsModel();
   var _userContact = "NIL";
   try {
@@ -471,22 +641,21 @@ exports.getBestScooters = function(qrScooterId,userLat,userLng,userId,_accountGr
     }).then(function(gpsObj){
         if (!gpsObj.exists() || qrScooterId === "NIL")
         {
-          throw(logger.logErrorReport("ERROR","/1.0/getBestScooters@482",[qrScooterId,userLat,userLng,userId]));
+          throw(logger.logErrorReport("ERROR","/1.0/getBestScooters@474",[qrScooterId,userLat,userLng,userId]));
         }
         else {
           gpsObj.forEach(function(snapshot){
-            _scooterObj = new gpsModel();
-            if(qrScooterId === _scooterObj.scooterId)
+            var _tempScooterObj = new gpsModel();
+            Object.assign(_tempScooterObj,snapshot.val());
+            if(qrScooterId === _tempScooterObj.scooterId)
             {
-              var scooterBattery = snapshot.child("Battery").exists() ? parseFloat(snapshot.val()["Battery"]) : 31;
-              scooterBatteryLevel = parseFloat(algorithm.map_range(scooterBattery,31,42,0,100));
+              scooterBatteryLevel = parseFloat(algorithm.map_range(_tempScooterObj.Battery,31,42,0,100));
               Object.assign(_scooterObj,snapshot.val(),{
                 "IMEI": snapshot.ref.key,
                 "batteryStatus": scooterBatteryLevel >= 65 ? "LONG_TRIP" : "SHORT_TRIP" ,
-                "status": scooterBatteryLevel <= 35 ? "BatteryLow" : snapshot.child("status").exists() ?
-                  snapshot.val()["status"] : "NIL",
+                "status": scooterBatteryLevel <= 35 ? "BatteryLow" : _tempScooterObj.status,
                 "Battery": scooterBatteryLevel,
-                "Distance": parseFloat(algorithm.map_range(scooterBattery,31,42,0,27))
+                "Distance": parseFloat(algorithm.map_range(_tempScooterObj.Battery,31,42,0,27))
               });
   
               if(_scooterObj.status === "LTD")

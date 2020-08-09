@@ -27,7 +27,7 @@ exports.getScooterOBJ = function(_accountGroup,scooterId)
   const db = dbUtil.admin.database();
   const _foundGPSObj = new gpsModel();
   try{
-    var gpsRef = db.ref("GPS").orderByChild("accountGroup").equalTo(_accountGroup).limitToLast(1);
+    var gpsRef = db.ref("GPS").orderByChild("accountGroup").equalTo(_accountGroup);
     gpsRef.once("value").then(function(snapshot){
       if (!snapshot.exists() || scooterId === "NIL")
       {

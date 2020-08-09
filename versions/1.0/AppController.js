@@ -362,7 +362,7 @@ exports.qrDocklessDropCheck = function(req,res)
   var userLat = req.body.userLat;
   var userLng = req.body.userLng;
 
-  if(qrString === undefined)
+  if(qrString === undefined || qrString.length === 0)
   {
     logger.catchFunc2(ip,"ERROR_MIS_PARM","/1.0/qrDocklessDropCheck@342","Drop Off Error\n[QRDDC1_8_342]",
       "Feature is currently in development. For more information, contact our customer support via in-app chat!",
