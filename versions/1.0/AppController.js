@@ -1400,67 +1400,8 @@ exports.createScooterReport = function(req,res)
     deferred.reject;
   }
 
-
-  
-  DBController.createScooterReport(_userId,_scooterId,_locationUser,_message,_typeOfIssue).then(function(data)
-  {
-    res.json(data);
-  }).catch(function(err){
-    logger.catchFunc2(ip,"ERROR","/1.0/createScooterReport@1686","Error 1.0_1686",
-      "There seems to be an issue with your request.Contact Telepod customer support for more information.",
-      res,400,"https://ibb.co/k2zQzG");
-  });
   return deferred.promise;
 }
-
-/* exports.getNearbyStations = function(req, res)
-{
-  var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-
-  if(!req.query.radiusM){
-    logger.catchFunc2(ip,"ERROR_MIS_PARM","/1.0/getNearbyStations@1697","Error 1.0_1697",
-      "There seems to be an issue with your request.Contact Telepod customer support for more information.",
-      res,400,"https://ibb.co/k2zQzG");
-      return;
-  }
-
-  if(!req.query.targetLocation){
-    logger.catchFunc2(ip,"ERROR_MIS_PARM","/1.0/getNearbyStations@1704","Error 1.0_1704",
-      "There seems to be an issue with your request.Contact Telepod customer support for more information.",
-      res,400,"https://ibb.co/k2zQzG");
-      return;
-  }
-
-  var locationArray = req.query.targetLocation.split(',');
-
-  if(locationArray.length > 2)
-  {
-    var newLat = locationArray[0] + "." + locationArray[1];
-    var newLng = locationArray[2] + "." + locationArray[3];
-
-    locationArray[0] = newLat;
-    locationArray[1] = newLng;
-  }
-
-  if(isNaN(locationArray[0]) || isNaN(locationArray[1]))
-  {
-    logger.catchFunc2(ip,"ERROR_MIS_PARM","/1.0/getNearbyStations@1723","Error 1.0_1723",
-      "There seems to be an issue with your request.Contact Telepod customer support for more information.",
-      res,400,"https://ibb.co/k2zQzG");
-    return;
-  }
-
-  var radiusKM = parseFloat(req.query.radiusM) / 1000;
-  logger.logAPICall(ip,"/1.0/getNearbyStations@1730",[req.query.targetLocation],req.session.uid);
-
-  dd.getNearbyStations(radiusKM,locationArray).then(function(result){
-    res.json(result);
-  }).catch(function(err){
-    logger.catchFunc2(ip,"ERROR_MIS_PARM","/1.0/getNearbyStations@1735","Error 1.0_1735",
-      "There seems to be an issue with your request.Contact Telepod customer support for more information.",
-      res,400,"https://ibb.co/k2zQzG");
-  });
-} */
 
 exports.setRefundReasons = function(req, res)
 {
@@ -1568,12 +1509,12 @@ exports.getProjectPKey = function(req, res)
   const accountGroup = req.session.accountGroup === undefined ? "NIL" : req.session.accountGroup;
   const _userId = req.query.userId === undefined ? "NIL" : req.query.userId;
   if(_userId === "NIL"){
-    logger.catchFunc2(ip,"ERROR_MIS_PARM","/1.0/getProjectPKey@1691","Error 1.0_1691",
+    logger.catchFunc2(ip,"ERROR_MIS_PARM","/1.0/getProjectPKey@1571","Error 1.0_1571",
       "There seems to be an issue with your request.Contact Telepod customer support for more information.",
       res,400,"https://ibb.co/k2zQzG");
       return;
   }
-  logger.logAPICall(ip,"/1.0/getProjectPKey@1696",[_userId,accountGroup],req.session.uid);
+  logger.logAPICall(ip,"/1.0/getProjectPKey@1576",[_userId,accountGroup],req.session.uid);
   try
   {
     const db = dbUtil.admin.database();
@@ -1586,7 +1527,7 @@ exports.getProjectPKey = function(req, res)
     userRef.child(_userId).once("value").then(function(userSnapshot){
       if(!userSnapshot.exists())
       {
-        throw(logger.logErrorReport("ERROR","/1.0/getProjectPKey@1709",[_userId,accountGroup]));
+        throw(logger.logErrorReport("ERROR","/1.0/getProjectPKey@1589",[_userId,accountGroup]));
       }
       else
       {
@@ -1597,15 +1538,15 @@ exports.getProjectPKey = function(req, res)
     }).then(function(commonSnapshot){
       if(!commonSnapshot.exists())
       {
-        throw(logger.logErrorReport("ERROR","/1.0/getProjectPKey@1720",[_userId,_userObj.country,accountGroup]));
+        throw(logger.logErrorReport("ERROR","/1.0/getProjectPKey@1600",[_userId,_userObj.country,accountGroup]));
       }
       else
       {
         Object.assign(_commonObj,commonSnapshot.val());
         if(_commonObj.stripePublishKey === "NIL" || _commonObj.stripeSecretKey === "NIL")
         {
-          logger.catchFunc2(ip,"ERROR_NIL_STRIPEKEY","/1.0/getProjectPKey@1730",
-            "Stripe API Error\n[GPPK1_0_1732]",
+          logger.catchFunc2(ip,"ERROR_NIL_STRIPEKEY","/1.0/getProjectPKey@1607",
+            "Stripe API Error\n[1608]",
             "There seems to be a problem in processing your request. Please try again",
             res,400,"https://ibb.co/k2zQzG");
           deferred.reject;
@@ -1618,7 +1559,7 @@ exports.getProjectPKey = function(req, res)
       }
     }).catch(function(e){
       logger.log("error",e);
-      logger.catchFunc2(ip,"ERROR","/1.0/getProjectPKey@1732","Stripe API Error\n[GPPK1_0_1732]",
+      logger.catchFunc2(ip,"ERROR","/1.0/getProjectPKey@1621","Stripe API Error\n[GPPK1_0_1621]",
         "There seems to be a problem in processing your request. Please try again",
         res,400,"https://ibb.co/k2zQzG");
       deferred.reject;
@@ -1626,7 +1567,7 @@ exports.getProjectPKey = function(req, res)
   }
   catch(e){
     logger.log("error",e);
-    logger.catchFunc2(ip,"ERROR","/1.0/getProjectPKey@1739","Error 1.1739",
+    logger.catchFunc2(ip,"ERROR","/1.0/getProjectPKey@1629","Error 1.1629",
       "There seems to be an issue with your request.Contact Telepod customer support for more information.",
       res,400,"https://ibb.co/k2zQzG");
     deferred.reject;
