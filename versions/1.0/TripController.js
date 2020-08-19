@@ -294,7 +294,7 @@ exports.qrDocklessDropCheck = function(userId,userTripId,qrString,userLat,userLn
       _userDropOffStation.l[0], _userDropOffStation.l[1]);
     const _userToStationDist = algorithm.GPSMeasureDistance(userLat, userLng,
       _userDropOffStation.l[0], _userDropOffStation.l[1]);
-      dropOffStationRadius = _userDropOffStation.dropOffRadius;
+      dropOffStationRadius = _userDropOffStation.geofenceRadiusM;
     if(_userToStationDist <= dropOffStationRadius || _scooterToStationDist <= dropOffStationRadius)
     {
       return dbController.getUserTransactionObj(userId,_userTripObj.passTransactionId,_accountGroup)
