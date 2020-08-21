@@ -60,7 +60,7 @@ exports.getAllStations = function(req, res)
     }
   }).catch(function(e){
     logger.catchFunc2(ip,"ERROR","/1.0/getAllStations@1663","Error 1.0_1663",
-      "There seems to be an issue with your request.Contact Telepod customer support for more information.",
+      "There seems to be an issue with your request.Contact TRYKE customer support for more information.",
       res,204,"https://ibb.co/k2zQzG");
   });
 }
@@ -92,7 +92,7 @@ exports.getOperatingZones = function(req, res)
     }
   }).catch(function(err){
     logger.catchFunc2(ip,"ERROR_MIS_PARM","/1.0/getOperatingZones@1692","Error 1.0_1692",
-      "There seems to be an issue with your request.Contact Telepod customer support for more information.",
+      "There seems to be an issue with your request.Contact TRYKE customer support for more information.",
       res,400,"https://ibb.co/k2zQzG");
   });
 }
@@ -134,7 +134,7 @@ exports.quickBook = function(req,res)
   var userId = req.query.userId;
   var scooterId = req.query.scooterId;
   var _stationId = req.query.stationId;
-  var _paymentType = req.query.paymentType !== undefined ? req.query.paymentType : "telepodCredit";
+  var _paymentType = req.query.paymentType !== undefined ? req.query.paymentType : "trykeCredit";
 
   var _userLat = parseFloat(req.query.userLat);
   var _userLng = parseFloat(req.query.userLng);
@@ -156,19 +156,19 @@ exports.quickBook = function(req,res)
       else if(err.status !== undefined && err.status == "ERROR_BAL")
       {
         logger.catchFunc2(ip,"ERROR_BAL","/1.0/quickBook@158","Unlock Scooter Error\n[QB1_8_158]",
-          "Insufficient Telepod credit to start a trip! Head to wallet for more information!",
+          "Insufficient TRYKE credit to start a trip! Head to wallet for more information!",
           res,400,"https://ibb.co/k2zQzG");
       }
       else if(err.status !== undefined && err.status == "ERROR_ZONE_SUSPENDED")
       {
         logger.catchFunc2(ip,"ERROR_ZONE_SUSPENDED","/1.0/quickBook@164","Unlock Scooter Error\n[QB1_8_164]",
-          "This Telepod zone is suspended at the moment! For more information, contact our customer support via in-app!",
+          "This TRYKE zone is suspended at the moment! For more information, contact our customer support via in-app!",
           res,400,"https://ibb.co/k2zQzG");
       }
       else if(err.status !== undefined && err.status == "ERROR_INUSE")
       {
         logger.catchFunc2(ip,"ERROR","/1.0/quickBook@170","Unlock Scooter Error\n[QB1_7_170]",
-        "This scooter has been booked by other Telepod user.",
+        "This scooter has been booked by other TRYKE user.",
         res,400,"https://ibb.co/k2zQzG");
       }
       else {
@@ -269,7 +269,7 @@ exports.checkActiveTrip = function(req, res)
   const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
   if(req.query.userId === undefined){
     logger.catchFunc2(ip,"ERROR_MIS_PARM","/1.0/checkActiveTrip@252","Error 24",
-      "There seems to be an issue with your request.Contact Telepod customer support for more information.",
+      "There seems to be an issue with your request.Contact TRYKE customer support for more information.",
       res,400,"https://ibb.co/k2zQzG");
     return;
   }
@@ -322,7 +322,7 @@ exports.checkActiveTrip = function(req, res)
   } catch (e) {
     logger.log("error",logger.logErrorReport("ERROR","/1.0/checkActiveTrip@300",[e]));
     logger.catchFunc2(ip,"ERROR","/1.0/checkActiveTrip@301","Error 1.001",
-      "There seems to be an issue with your request.Contact Telepod customer support for more information.",
+      "There seems to be an issue with your request.Contact TRYKE customer support for more information.",
       res,400,"https://ibb.co/k2zQzG");
     deferred.reject;
   }
@@ -335,7 +335,7 @@ exports.getUserActivePass = function(req, res)
 
   if(!req.query.userId){
     logger.catchFunc2(ip,"ERROR_MIS_PARM","/1.0/getUserActivePass@306","Error 1.0_306",
-      "There seems to be an issue with your request.Contact Telepod customer support for more information.",
+      "There seems to be an issue with your request.Contact TRYKE customer support for more information.",
       res,400,"https://ibb.co/k2zQzG");
       return;
   }
@@ -347,7 +347,7 @@ exports.getUserActivePass = function(req, res)
     res.json(result);
   }).catch(function(err){
     logger.catchFunc2(ip,"ERROR","/1.0/getUserActivePass@317","Error 1.017",
-      "There seems to be an issue with your request.Contact Telepod customer support for more information.",
+      "There seems to be an issue with your request.Contact TRYKE customer support for more information.",
       res,400,"https://ibb.co/k2zQzG");
   });
 }
@@ -406,7 +406,7 @@ exports.qrDocklessDropCheck = function(req,res)
     else if((err !== undefined || err !== null) && err.status == "ERROR_QR")
     {
       logger.catchFunc2(ip,"ERROR","/1.0/qrDocklessDropCheck@348","QR Code Error\n[QRDDC1_8_383]",
-        "Please scan TELEPOD STATION QR to end trip!",
+        "Please scan TRYKE STATION QR to end trip!",
         res,400,"https://ibb.co/k2zQzG");
     }
     else if((err !== undefined || err !== null) && err.status == "ERROR_FAR")
@@ -483,7 +483,7 @@ exports.getCommon = function(req, res)
   }).catch(function(err){
     logger.log("error",logger.logErrorReport("ERROR","/1.0/getCommon@459",[err]));
     logger.catchFunc2(ip,"ERROR","/1.0/getCommon@459","Error 1.04",
-      "There seems to be an issue with your request.Contact Telepod customer support for more information.",
+      "There seems to be an issue with your request.Contact TRYKE customer support for more information.",
       res,400,"https://ibb.co/k2zQzG");
   });
 }
@@ -798,7 +798,7 @@ exports.twoFaReg = function(req, res)
     numbers: true,
     chars:false
   });
-  var _text = "Telepod Key: "+_pinCode+". Valid for 1 minute. If you face any issue, feel free to contact our customer support via in-app chat."
+  var _text = "TRYKE Key: "+_pinCode+". Valid for 1 minute. If you face any issue, feel free to contact our customer support via in-app chat."
   try {
     jwt.sign({
       country: _country,
@@ -814,7 +814,7 @@ exports.twoFaReg = function(req, res)
         else
         {
           res.json({"status":"OK","requestId": tokenGenerated});
-          nexmo.message.sendSms("Telepod", _phoneNumber, _text);
+          nexmo.message.sendSms("TRYKE", _phoneNumber, _text);
         }
       }
       else
@@ -957,7 +957,7 @@ exports.buzzScooter = function(req, res)
   const accountGroup = req.session.accountGroup === undefined ? "NIL" : req.session.accountGroup;
   if(!req.query.scooterId){
     logger.catchFunc2(ip,"ERROR_MIS_PARM","/1.0/buzzScooter@1284","Error 1.0_1207",
-      "There seems to be an issue with your request.Contact Telepod customer support for more information.",
+      "There seems to be an issue with your request.Contact TRYKE customer support for more information.",
       res,400,"https://ibb.co/k2zQzG");
       return;
   }
@@ -967,7 +967,7 @@ exports.buzzScooter = function(req, res)
     res.json(result);
   }).catch(function(err){
     logger.catchFunc2(ip,"ERROR","/1.0/buzzScooter@1294","Error 1.0_1217",
-      "There seems to be an issue with your request.Contact Telepod customer support for more information.",
+      "There seems to be an issue with your request.Contact TRYKE customer support for more information.",
       res,400,"https://ibb.co/k2zQzG");
   });
 }
@@ -1114,13 +1114,13 @@ exports.lightOff = function(req, res)
   const accountGroup = req.session.accountGroup === undefined ? "NIL" : req.session.accountGroup;
   if(!req.query.userId){
     logger.catchFunc2(ip,"ERROR_MIS_PARM","/1.0/lightOff@1365","Error 1.0_1365",
-      "There seems to be an issue with your request.Contact Telepod customer support for more information.",
+      "There seems to be an issue with your request.Contact TRYKE customer support for more information.",
       res,400,"https://ibb.co/k2zQzG");
       return;
   }
   if(!req.query.scooterId){
     logger.catchFunc2(ip,"ERROR_MIS_PARM","/1.0/lightOff@1371","Error 1.0_1371",
-      "There seems to be an issue with your request.Contact Telepod customer support for more information.",
+      "There seems to be an issue with your request.Contact TRYKE customer support for more information.",
       res,400,"https://ibb.co/k2zQzG");
       return;
   }
@@ -1131,7 +1131,7 @@ exports.lightOff = function(req, res)
     res.json({"status":"OK"});
   }).catch(function(e){
     logger.catchFunc2(ip,"ERROR","/1.0/lightOff@1382","Error 1.1382",
-      "There seems to be an issue with your request.Contact Telepod customer support for more information.",
+      "There seems to be an issue with your request.Contact TRYKE customer support for more information.",
       res,400,"https://ibb.co/k2zQzG");
   });
 }
@@ -1142,13 +1142,13 @@ exports.lightOn = function(req, res)
   const accountGroup = req.session.accountGroup === undefined ? "NIL" : req.session.accountGroup;
   if(!req.query.userId){
     logger.catchFunc2(ip,"ERROR_MIS_PARM","/1.0/lightOn@1392","Error 1.0_1392",
-      "There seems to be an issue with your request.Contact Telepod customer support for more information.",
+      "There seems to be an issue with your request.Contact TRYKE customer support for more information.",
       res,400,"https://ibb.co/k2zQzG");
       return;
   }
   if(!req.query.scooterId){
     logger.catchFunc2(ip,"ERROR_MIS_PARM","/1.0/lightOn@1398","Error 1.0_13987",
-      "There seems to be an issue with your request.Contact Telepod customer support for more information.",
+      "There seems to be an issue with your request.Contact TRYKE customer support for more information.",
       res,400,"https://ibb.co/k2zQzG");
       return;
   }
@@ -1159,7 +1159,7 @@ exports.lightOn = function(req, res)
     res.json({"status":"OK"});
   }).catch(function(e){
     logger.catchFunc2(ip,"ERROR","/1.0/lightOn@1409","Error 1.1409",
-      "There seems to be an issue with your request.Contact Telepod customer support for more information.",
+      "There seems to be an issue with your request.Contact TRYKE customer support for more information.",
       res,400,"https://ibb.co/k2zQzG");
   });
 }
@@ -1170,13 +1170,13 @@ exports.getScootersInStation = function(req, res)
   const accountGroup = req.session.accountGroup === undefined ? "NIL" : req.session.accountGroup;
   if(!req.query.userId){
     logger.catchFunc2(ip,"ERROR_MIS_PARM","/1.0/getScootersInStation@1419","Error 1.0_1419",
-      "There seems to be an issue with your request.Contact Telepod customer support for more information.",
+      "There seems to be an issue with your request.Contact TRYKE customer support for more information.",
       res,400,"https://ibb.co/k2zQzG");
       return;
   }
   if(!req.query.stationId){
     logger.catchFunc2(ip,"ERROR_MIS_PARM","/1.0/getScootersInStation@1425","Error 1.0_1425",
-      "There seems to be an issue with your request.Contact Telepod customer support for more information.",
+      "There seems to be an issue with your request.Contact TRYKE customer support for more information.",
       res,400,"https://ibb.co/k2zQzG");
       return;
   }
@@ -1187,7 +1187,7 @@ exports.getScootersInStation = function(req, res)
     res.json(scooterObjArr);
   }).catch(function(e){
     logger.catchFunc2(ip,"ERROR","/1.0/getScootersInStation@1436","Query Error\n[GSIS1_0_1436]",
-      "There seems to be an issue with your request.Contact Telepod customer support for more information.",
+      "There seems to be an issue with your request.Contact TRYKE customer support for more information.",
       res,400,"https://ibb.co/k2zQzG");
   });
 }
@@ -1198,14 +1198,14 @@ exports.checkUserReferral = function(req, res)
 
   if(!req.query.userId){
     logger.catchFunc2(ip,"ERROR_MIS_PARM","/1.0/checkUserReferral@1482","Error 1.0_1482",
-      "There seems to be an issue with your request.Contact Telepod customer support for more information.",
+      "There seems to be an issue with your request.Contact TRYKE customer support for more information.",
       res,400,"https://ibb.co/k2zQzG");
       return;
   }
 
   if(!req.query.refId){
     logger.catchFunc2(ip,"ERROR_MIS_PARM","/1.0/checkUserReferral@1489","Error 1.0_1489",
-      "There seems to be an issue with your request.Contact Telepod customer support for more information.",
+      "There seems to be an issue with your request.Contact TRYKE customer support for more information.",
       res,400,"https://ibb.co/k2zQzG");
       return;
   }
@@ -1218,7 +1218,7 @@ exports.checkUserReferral = function(req, res)
   if(_userId === _refId)
   {
     logger.catchFunc2(ip,"ERROR","/1.0/checkUserReferral@1502","Error 1.0_1502",
-      "There seems to be an issue with your request.Contact Telepod customer support for more information.",
+      "There seems to be an issue with your request.Contact TRYKE customer support for more information.",
       res,400,"https://ibb.co/k2zQzG");
     return;
   }
@@ -1227,7 +1227,7 @@ exports.checkUserReferral = function(req, res)
     res.json(result);
   }).catch(function(err){
     logger.catchFunc2(ip,"ERROR","/1.0/checkUserReferral@1511","Error 1.0_1511",
-      "There seems to be an issue with your request.Contact Telepod customer support for more information.",
+      "There seems to be an issue with your request.Contact TRYKE customer support for more information.",
       res,400,"https://ibb.co/k2zQzG");
   });
 }
@@ -1238,14 +1238,14 @@ exports.unlockScooter = function(req, res)
   const accountGroup = req.session.accountGroup === undefined ? "NIL" : req.session.accountGroup;
   if(!req.query.userId){
     logger.catchFunc2(ip,"ERROR_MIS_PARM","/1.0/unlockScooter@1553","Error 1.0_1553",
-      "There seems to be an issue with your request.Contact Telepod customer support for more information.",
+      "There seems to be an issue with your request.Contact TRYKE customer support for more information.",
       res,400,"https://ibb.co/k2zQzG");
       return;
   }
 
   if(!req.query.scooterId){
     logger.catchFunc2(ip,"ERROR_MIS_PARM","/1.0/unlockScooter@1560","Error 1.0_1560",
-      "There seems to be an issue with your request.Contact Telepod customer support for more information.",
+      "There seems to be an issue with your request.Contact TRYKE customer support for more information.",
       res,400,"https://ibb.co/k2zQzG");
       return;
   }
@@ -1258,7 +1258,7 @@ exports.unlockScooter = function(req, res)
     res.json({"status":"OK"});
   }).catch(function(e){
     logger.catchFunc2(ip,"ERROR","/1.0/unlockScooter@1573","Error 1.0_1573",
-      "There seems to be an issue with your request.Contact Telepod customer support for more information.",
+      "There seems to be an issue with your request.Contact TRYKE customer support for more information.",
       res,400,"https://ibb.co/k2zQzG");
   });
 }
@@ -1269,14 +1269,14 @@ exports.lockScooter = function(req, res)
   const accountGroup = req.session.accountGroup === undefined ? "NIL" : req.session.accountGroup;
   if(!req.query.userId){
     logger.catchFunc2(ip,"ERROR_MIS_PARM","/1.0/lockScooter@1584","Error 1.1584",
-      "There seems to be an issue with your request.Contact Telepod customer support for more information.",
+      "There seems to be an issue with your request.Contact TRYKE customer support for more information.",
       res,400,"https://ibb.co/k2zQzG");
       return;
   }
 
   if(!req.query.scooterId){
     logger.catchFunc2(ip,"ERROR_MIS_PARM","/1.0/lockScooter@1591","Error 1.1591",
-      "There seems to be an issue with your request.Contact Telepod customer support for more information.",
+      "There seems to be an issue with your request.Contact TRYKE customer support for more information.",
       res,400,"https://ibb.co/k2zQzG");
       return;
   }
@@ -1289,7 +1289,7 @@ exports.lockScooter = function(req, res)
     res.json({"status":"OK"});
   }).catch(function(e){
     logger.catchFunc2(ip,"ERROR","/1.0/lockScooter@1604","Error 1.1604",
-      "There seems to be an issue with your request.Contact Telepod customer support for more information.",
+      "There seems to be an issue with your request.Contact TRYKE customer support for more information.",
       res,400,"https://ibb.co/k2zQzG");
   });
 }
@@ -1300,7 +1300,7 @@ exports.convertUserDepositToCredit = function(req, res)
 
   if(!req.query.userId){
     logger.catchFunc2(ip,"ERROR_MIS_PARM","/1.0/convertUserDepositToCredit@1615","Error 1.0_1615",
-      "There seems to be an issue with your request.Contact Telepod customer support for more information.",
+      "There seems to be an issue with your request.Contact TRYKE customer support for more information.",
       res,400,"https://ibb.co/k2zQzG");
       return;
   }
@@ -1311,7 +1311,7 @@ exports.convertUserDepositToCredit = function(req, res)
     res.json(response);
   }).catch(function(error){
     logger.catchFunc2(ip,"ERROR","/1.0/convertUserDepositToCredit@1626","Error 1.0_1626",
-      "There seems to be an issue with your request.Contact Telepod customer support for more information.",
+      "There seems to be an issue with your request.Contact TRYKE customer support for more information.",
       res,400,"https://ibb.co/k2zQzG");
   });
 }
@@ -1330,14 +1330,14 @@ exports.createScooterReport = function(req,res)
   if(!_userId)
   {
     logger.catchFunc2(ip,"ERROR_MIS_PARM","/1.0/createScooterReport@1644","Error 1.0_1644",
-      "There seems to be an issue with your request.Contact Telepod customer support for more information.",
+      "There seems to be an issue with your request.Contact TRYKE customer support for more information.",
       res,400,"https://ibb.co/k2zQzG");
     return;
   }
   if(!_scooterId)
   {
     logger.catchFunc2(ip,"ERROR_MIS_PARM","/1.0/createScooterReport@1651","Error 1.0_1651",
-      "There seems to be an issue with your request.Contact Telepod customer support for more information.",
+      "There seems to be an issue with your request.Contact TRYKE customer support for more information.",
       res,400,"https://ibb.co/k2zQzG");
     return;
   }
@@ -1345,7 +1345,7 @@ exports.createScooterReport = function(req,res)
   if(!_locationUser)
   {
     logger.catchFunc2(ip,"ERROR_MIS_PARM","/1.0/createScooterReport@1659","Error 1.0_1659",
-      "There seems to be an issue with your request.Contact Telepod customer support for more information.",
+      "There seems to be an issue with your request.Contact TRYKE customer support for more information.",
       res,400,"https://ibb.co/k2zQzG");
     return;
   }
@@ -1353,7 +1353,7 @@ exports.createScooterReport = function(req,res)
   if(!_message)
   {
     logger.catchFunc2(ip,"ERROR_MIS_PARM","/1.0/createScooterReport@1667","Error 1.0_1667",
-      "There seems to be an issue with your request.Contact Telepod customer support for more information.",
+      "There seems to be an issue with your request.Contact TRYKE customer support for more information.",
       res,400,"https://ibb.co/k2zQzG");
     return;
   }
@@ -1361,7 +1361,7 @@ exports.createScooterReport = function(req,res)
   if(!_typeOfIssue)
   {
     logger.catchFunc2(ip,"ERROR_MIS_PARM","/1.0/createScooterReport@1675","Error 1.0_1675",
-      "There seems to be an issue with your request.Contact Telepod customer support for more information.",
+      "There seems to be an issue with your request.Contact TRYKE customer support for more information.",
       res,400,"https://ibb.co/k2zQzG");
     return;
   }
@@ -1386,7 +1386,7 @@ exports.createScooterReport = function(req,res)
       deferred.resolve;
     }).catch(function(err){
       logger.catchFunc2(ip,"ERROR","/1.0/createScooterReport@1705","Error 1.0_1705",
-      "There seems to be an issue with your request.Contact Telepod customer support for more information.",
+      "There seems to be an issue with your request.Contact TRYKE customer support for more information.",
       res,400,"https://ibb.co/k2zQzG");
       deferred.reject;
     })
@@ -1395,7 +1395,7 @@ exports.createScooterReport = function(req,res)
   catch(e)
   {
     logger.catchFunc2(ip,"ERROR","/1.0/createScooterReport@1686","Error 1.0_1686",
-    "There seems to be an issue with your request.Contact Telepod customer support for more information.",
+    "There seems to be an issue with your request.Contact TRYKE customer support for more information.",
     res,400,"https://ibb.co/k2zQzG");
     deferred.reject;
   }
@@ -1413,28 +1413,28 @@ exports.setRefundReasons = function(req, res)
 
   if(!userId){
     logger.catchFunc2(ip,"ERROR_MIS_PARM","/1.0/setRefundReasons@1750","Error 1.0_1750",
-      "There seems to be an issue with your request.Contact Telepod customer support for more information.",
+      "There seems to be an issue with your request.Contact TRYKE customer support for more information.",
       res,400,"https://ibb.co/k2zQzG");
       return;
   }
 
   if(!reason){
     logger.catchFunc2(ip,"ERROR_MIS_PARM","/1.0/setRefundReasons@1757","Error 1.0_1757",
-      "There seems to be an issue with your request.Contact Telepod customer support for more information.",
+      "There seems to be an issue with your request.Contact TRYKE customer support for more information.",
       res,400,"https://ibb.co/k2zQzG");
       return;
   }
 
   if(!reason1){
     logger.catchFunc2(ip,"ERROR_MIS_PARM","/1.0/setRefundReasons@1764","Error 1.0_1764",
-      "There seems to be an issue with your request.Contact Telepod customer support for more information.",
+      "There seems to be an issue with your request.Contact TRYKE customer support for more information.",
       res,400,"https://ibb.co/k2zQzG");
       return;
   }
 
   if(!reason2){
       logger.catchFunc2(ip,"ERROR_MIS_PARM","/1.0/setRefundReasons@1771","Error 1.0_1771",
-        "There seems to be an issue with your request.Contact Telepod customer support for more information.",
+        "There seems to be an issue with your request.Contact TRYKE customer support for more information.",
         res,400,"https://ibb.co/k2zQzG");
       return;
   }
@@ -1445,7 +1445,7 @@ exports.setRefundReasons = function(req, res)
     res.json(result);
   }).catch(function(err){
     logger.catchFunc2(ip,"ERROR","/1.0/setRefundReasons@1782","Error 1.0_1782",
-      "There seems to be an issue with your request.Contact Telepod customer support for more information.",
+      "There seems to be an issue with your request.Contact TRYKE customer support for more information.",
       res,400,"https://ibb.co/k2zQzG");
   });
 }
@@ -1458,14 +1458,14 @@ exports.setRestoreId = function(req, res)
 
   if(!userId){
     logger.catchFunc2(ip,"ERROR_MIS_PARM","/1.0/setRestoreId@1795","Error 1.0_1795",
-      "There seems to be an issue with your request.Contact Telepod customer support for more information.",
+      "There seems to be an issue with your request.Contact TRYKE customer support for more information.",
       res,400,"https://ibb.co/k2zQzG");
       return;
   }
 
   if(!restoreId){
       logger.catchFunc2(ip,"ERROR_MIS_PARM","/1.0/setRestoreId@1802","Error 1.0_1802",
-        "There seems to be an issue with your request.Contact Telepod customer support for more information.",
+        "There seems to be an issue with your request.Contact TRYKE customer support for more information.",
         res,400,"https://ibb.co/k2zQzG");
       return;
   }
@@ -1475,7 +1475,7 @@ exports.setRestoreId = function(req, res)
     res.json(result);
   }).catch(function(err){
     logger.catchFunc2(ip,"ERROR","/1.0/setRestoreId@1812","Error 1.0_1812",
-      "There seems to be an issue with your request.Contact Telepod customer support for more information.",
+      "There seems to be an issue with your request.Contact TRYKE customer support for more information.",
       res,400,"https://ibb.co/k2zQzG");
   });
 }
@@ -1485,7 +1485,7 @@ exports.getUserTransactions = function(req, res)
   const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
   if(!req.query.userId){
     logger.catchFunc2(ip,"ERROR_MIS_PARM","/1.0/getUserTransactions@1822","Error 1.0_1821",
-      "There seems to be an issue with your request.Contact Telepod customer support for more information.",
+      "There seems to be an issue with your request.Contact TRYKE customer support for more information.",
       res,400,"https://ibb.co/k2zQzG");
       return;
   }
@@ -1497,7 +1497,7 @@ exports.getUserTransactions = function(req, res)
     res.json(result);
   }).catch(function(err){
     logger.catchFunc2(ip,"ERROR","/1.0/getUserTransactions@1834","Error 1.0_1834",
-      "There seems to be an issue with your request.Contact Telepod customer support for more information.",
+      "There seems to be an issue with your request.Contact TRYKE customer support for more information.",
       res,400,"https://ibb.co/k2zQzG");
   });
 }
@@ -1510,7 +1510,7 @@ exports.getProjectPKey = function(req, res)
   const _userId = req.query.userId === undefined ? "NIL" : req.query.userId;
   if(_userId === "NIL"){
     logger.catchFunc2(ip,"ERROR_MIS_PARM","/1.0/getProjectPKey@1571","Error 1.0_1571",
-      "There seems to be an issue with your request.Contact Telepod customer support for more information.",
+      "There seems to be an issue with your request.Contact TRYKE customer support for more information.",
       res,400,"https://ibb.co/k2zQzG");
       return;
   }
@@ -1568,7 +1568,7 @@ exports.getProjectPKey = function(req, res)
   catch(e){
     logger.log("error",e);
     logger.catchFunc2(ip,"ERROR","/1.0/getProjectPKey@1629","Error 1.1629",
-      "There seems to be an issue with your request.Contact Telepod customer support for more information.",
+      "There seems to be an issue with your request.Contact TRYKE customer support for more information.",
       res,400,"https://ibb.co/k2zQzG");
     deferred.reject;
   }
@@ -1599,14 +1599,14 @@ exports.createPaymentIntent = function(req,res)
   if(_userId === undefined || !_userId || _userId === "")
   {
     logger.catchFunc2(ip,"ERROR_MIS_PARM","/1.0/createPaymentIntent@1785","Error 1.0_1785",
-    "There seems to be an issue with your request.Contact Telepod customer support for more information.",
+    "There seems to be an issue with your request.Contact TRYKE customer support for more information.",
     res,400,"https://ibb.co/k2zQzG");
     deferred.resolve;
   }
   if(_passId === "NIL" && _paymentAmount <= 0)
   {
     logger.catchFunc2(ip,"ERROR","/1.0/createPaymentIntent@1792","Error 1.0_1792",
-    "There seems to be an issue with your request.Contact Telepod customer support for more information.",
+    "There seems to be an issue with your request.Contact TRYKE customer support for more information.",
     res,400,"https://ibb.co/k2zQzG");
     deferred.resolve;
   }
@@ -1767,7 +1767,7 @@ exports.createPaymentIntent = function(req,res)
   catch(e)
   {
     logger.catchFunc2(ip,"ERROR","/1.0/createPaymentIntent@1970","Error 1.1970",
-    "There seems to be an issue with your request.Contact Telepod customer support for more information.",
+    "There seems to be an issue with your request.Contact TRYKE customer support for more information.",
     res,400,"https://ibb.co/k2zQzG");
   deferred.reject;
   }
@@ -1786,7 +1786,7 @@ exports.authenticatePaymentIntent = function(req,res)
   if(_creditCardToken === undefined || _creditCardToken === "NIL")
   {
     logger.catchFunc2(ip,"ERROR_MIS_PARM","/1.0/authenticatePaymentIntent@1907","Error 1.0_1907",
-    "There seems to be an issue with your request.Contact Telepod customer support for more information.",
+    "There seems to be an issue with your request.Contact TRYKE customer support for more information.",
     res,400,"https://ibb.co/k2zQzG");
     deferred.resolve();
   }
@@ -1794,7 +1794,7 @@ exports.authenticatePaymentIntent = function(req,res)
   if(_userId === undefined || _userId === "NIL")
   {
     logger.catchFunc2(ip,"ERROR_MIS_PARM","/1.0/authenticatePaymentIntent@1915","Error 1.0_1915",
-    "There seems to be an issue with your request.Contact Telepod customer support for more information.",
+    "There seems to be an issue with your request.Contact TRYKE customer support for more information.",
     res,400,"https://ibb.co/k2zQzG");
     deferred.resolve;
   }
@@ -1928,7 +1928,7 @@ exports.authenticatePaymentIntent = function(req,res)
   catch(e)
   {
     logger.catchFunc2(ip,"ERROR","/1.0/authenticatePaymentIntent@1739","Error 1.1739",
-    "There seems to be an issue with your request.Contact Telepod customer support for more information.",
+    "There seems to be an issue with your request.Contact TRYKE customer support for more information.",
     res,400,"https://ibb.co/k2zQzG");
   deferred.reject;
   }
@@ -1944,7 +1944,7 @@ exports.removeCC = function(req, res)
   const _userId = req.query.userId === undefined ? "NIL" : req.query.userId;
   if(_userId === "NIL"){
     logger.catchFunc2(ip,"ERROR_MIS_PARM","/1.0/removeCC@2130","Error 1.0_2130",
-      "There seems to be an issue with your request.Contact Telepod customer support for more information.",
+      "There seems to be an issue with your request.Contact TRYKE customer support for more information.",
       res,400,"https://ibb.co/k2zQzG");
       return;
   }
@@ -2017,7 +2017,7 @@ exports.removeCC = function(req, res)
   catch(e){
     logger.log("error",e);
     logger.catchFunc2(ip,"ERROR","/1.0/removeCC@2188","Error 1.2188",
-      "There seems to be an issue with your request.Contact Telepod customer support for more information.",
+      "There seems to be an issue with your request.Contact TRYKE customer support for more information.",
       res,400,"https://ibb.co/k2zQzG");
     deferred.reject;
   }
