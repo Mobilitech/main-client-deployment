@@ -134,7 +134,7 @@ exports.quickBook = function(req,res)
   var userId = req.query.userId;
   var scooterId = req.query.scooterId;
   var _stationId = req.query.stationId;
-  var _paymentType = req.query.paymentType !== undefined ? req.query.paymentType : "trykeCredit";
+  var _paymentType = req.query.paymentType !== undefined ? req.query.paymentType : "telepodCredit";
 
   var _userLat = parseFloat(req.query.userLat);
   var _userLng = parseFloat(req.query.userLng);
@@ -1759,7 +1759,7 @@ exports.createPaymentIntent = function(req,res)
     }).catch(function(e){
       logger.log("error",e);
       logger.catchFunc2(ip,"ERROR","/1.0/createPaymentIntent@1962","Stripe API Error\n[GPPK1_0_1962]",
-        "There seems to be a problem in processing your request. Please try again",
+        "There seems to be a problem in processing your request. Please try again data received: " + _userTransactionObj,
         res,400,"https://ibb.co/k2zQzG");
       deferred.reject;
     })
