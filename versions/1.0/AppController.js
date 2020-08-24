@@ -134,7 +134,7 @@ exports.quickBook = function(req,res)
   var userId = req.query.userId;
   var scooterId = req.query.scooterId;
   var _stationId = req.query.stationId;
-  var _paymentType = req.query.paymentType !== undefined ? req.query.paymentType : "telepodCredit";
+  var _paymentType = req.query.paymentType !== undefined ? req.query.paymentType : "trykeCredit";
 
   var _userLat = parseFloat(req.query.userLat);
   var _userLng = parseFloat(req.query.userLng);

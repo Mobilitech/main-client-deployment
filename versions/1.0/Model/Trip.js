@@ -10,7 +10,7 @@ class Trip
     this.tripRefId = "NIL";
     this.saveCreditCard = false;
     this.isMultiTrip = false;
-    this.paymentType = "telepodCredit"; // or creditCard
+    this.paymentType = "trykeCredit"; // or creditCard
     this.userLocationAtBooking = [-1,-1];
     this.userLocationAtDropOff = [-1,-1];
     this.pickUpStationId = "NIL";
