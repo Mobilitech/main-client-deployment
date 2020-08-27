@@ -308,7 +308,7 @@ exports.qrDocklessDropCheck = function(userId,userTripId,qrString,userLat,userLn
     else
     {
       throw(logger.logErrorReport("ERROR_FAR","/1.0/qrDocklessDropCheck@350",
-      [userId,userTripId,qrString,userLat,userLng,_userToStationDist,_scooterToStationDist]));
+      [userId,userTripId,qrString,userLat,userLng,_userToStationDist,_scooterToStationDist, dropOffStationRadius]));
     }
   }).then(function(useractivearray){ //for trip with passes
     if(useractivearray.passId !== undefined)
