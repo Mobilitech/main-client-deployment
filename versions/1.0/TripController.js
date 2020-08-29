@@ -294,6 +294,7 @@ exports.qrDocklessDropCheck = function(userId,userTripId,qrString,userLat,userLn
       _userDropOffStation.l[0], _userDropOffStation.l[1]);
     const _userToStationDist = algorithm.GPSMeasureDistance(userLat, userLng,
       _userDropOffStation.l[0], _userDropOffStation.l[1]);
+      dropOffStationRadius = _userDropOffStation.geofenceRadiusM;
     if(_userToStationDist <= dropOffStationRadius || _scooterToStationDist <= dropOffStationRadius)
     {
       return dbController.getUserTransactionObj(userId,_userTripObj.passTransactionId,_accountGroup)
@@ -307,7 +308,7 @@ exports.qrDocklessDropCheck = function(userId,userTripId,qrString,userLat,userLn
     else
     {
       throw(logger.logErrorReport("ERROR_FAR","/1.0/qrDocklessDropCheck@350",
-      [userId,userTripId,qrString,userLat,userLng,_userToStationDist,_scooterToStationDist]));
+      [userId,userTripId,qrString,userLat,userLng,_userToStationDist,_scooterToStationDist, dropOffStationRadius]));
     }
   }).then(function(useractivearray){ //for trip with passes
     if(useractivearray.passId !== undefined)
