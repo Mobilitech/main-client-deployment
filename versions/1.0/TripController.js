@@ -218,7 +218,7 @@ exports.qrDocklessDropCheck = function(userId,userTripId,qrString,userLat,userLn
   var dropOffIsExclusive=false;
   var dropOffStationRadius = 400;
   var dropOffStationName = "NIL";
-  var dropOffZoneUnlockFare =0 ;
+  var dropOffZoneUnlockFare = 0;
   var pickUpZoneId;
   var pickUpZoneFare = 15;
   var pickUpZoneTimeBlock = 60;
@@ -342,7 +342,7 @@ exports.qrDocklessDropCheck = function(userId,userTripId,qrString,userLat,userLn
     {
       return dbController.getZoneOBJ(_accountGroup,_userDropOffStation.zoneId).then(function(_zoneObjRecv){
         var _zoneObjRecvTemp = new zoneModel();
-        Object.assign(_zoneObjRecvTemp,{"zoneId":_userDropOffStation.zoneId});
+        Object.assign(_zoneObjRecvTemp,_zoneObjRecv,{"zoneId":_userDropOffStation.zoneId});
         return _zoneObjRecvTemp;
       });
     }
