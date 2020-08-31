@@ -163,7 +163,8 @@ exports.quickBook = function(userId,scooterId,stationId,userLat,userLng,userPaym
         "pickUpTime":bookingTime,
         "pickUpZoneId":_zoneObj.zoneId,
         "pickUpStationId":stationId,
-        "pickUpStationName":_stationObj.stationName
+        "pickUpStationName":_stationObj.stationName,
+        "etcFare":_zoneObj.zoneUnlockFare
       });
 
       var tempStatus = _previousTripObj.status === "TRIP_STARTED" ? "MULTI_TRIP_STARTED" :
