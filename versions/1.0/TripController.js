@@ -354,7 +354,8 @@ exports.qrDocklessDropCheck = function(userId,userTripId,qrString,userLat,userLn
   }).then(function(dropOffZoneOBJ){
     dropOffZoneId = dropOffZoneOBJ.zoneId !== "NIL" ? dropOffZoneOBJ.zoneId : _userTripObj.pickUpZoneId;
     dropOffIsExclusive = dropOffZoneOBJ.zoneId !== "NIL" ? dropOffZoneOBJ.isExclusive : false;
-    dropOffZoneUnlockFare = dropOffZoneOBJ.zoneUnlockFare;
+    dropOffZoneUnlockFare = pickUpZoneOBJ.zoneUnlockFare;
+
     if((pickUpIsExclusive) && (pickUpZoneId !== dropOffZoneId))
     {
       throw(logger.logErrorReport("ERROR_DIST","/1.0/CountryControllers/SGPControllers/qrDocklessDropCheck@247",
