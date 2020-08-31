@@ -217,7 +217,7 @@ exports.qrDocklessDropCheck = function(userId,userTripId,qrString,userLat,userLn
   var dropOffIsExclusive=false;
   var dropOffStationRadius = 400;
   var dropOffStationName = "NIL";
-
+  var dropOffZoneUnlockFare =0 ;
   var pickUpZoneId;
   var pickUpZoneFare = 15;
   var pickUpZoneTimeBlock = 60;
@@ -353,7 +353,7 @@ exports.qrDocklessDropCheck = function(userId,userTripId,qrString,userLat,userLn
   }).then(function(dropOffZoneOBJ){
     dropOffZoneId = dropOffZoneOBJ.zoneId !== "NIL" ? dropOffZoneOBJ.zoneId : _userTripObj.pickUpZoneId;
     dropOffIsExclusive = dropOffZoneOBJ.zoneId !== "NIL" ? dropOffZoneOBJ.isExclusive : false;
-
+    dropOffZoneUnlockFare = dropOffZoneOBJ.zoneUnlockFare;
     if((pickUpIsExclusive) && (pickUpZoneId !== dropOffZoneId))
     {
       throw(logger.logErrorReport("ERROR_DIST","/1.0/CountryControllers/SGPControllers/qrDocklessDropCheck@247",
@@ -396,7 +396,7 @@ exports.qrDocklessDropCheck = function(userId,userTripId,qrString,userLat,userLn
         [userId,userTripId,qrString,userLat,userLng,err]));
     });
   }).then(function(fareData){ //Pricing-matters fall in here
-    totalFare = fareData.fareInCents + etcFare;
+    totalFare = fareData.fareInCents + etcFare + dropOffZoneUnlockFare;
 
     var _commonCountry = _userObj.country === "NIL" ? "DEF" : _userObj.country;
     return commonRef.child(_commonCountry).once("value").then(function(_commonSnapshot){
