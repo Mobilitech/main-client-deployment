@@ -398,7 +398,8 @@ exports.qrDocklessDropCheck = function(userId,userTripId,qrString,userLat,userLn
         [userId,userTripId,qrString,userLat,userLng,err]));
     });
   }).then(function(fareData){ //Pricing-matters fall in here
-    totalFare = fareData.fareInCents + etcFare + dropOffZoneUnlockFare;
+    etcFare = dropOffZoneUnlockFare;
+    totalFare = fareData.fareInCents + etcFare;
 
     var _commonCountry = _userObj.country === "NIL" ? "DEF" : _userObj.country;
     return commonRef.child(_commonCountry).once("value").then(function(_commonSnapshot){
