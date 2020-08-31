@@ -354,7 +354,7 @@ exports.qrDocklessDropCheck = function(userId,userTripId,qrString,userLat,userLn
   }).then(function(dropOffZoneOBJ){
     dropOffZoneId = dropOffZoneOBJ.zoneId !== "NIL" ? dropOffZoneOBJ.zoneId : _userTripObj.pickUpZoneId;
     dropOffIsExclusive = dropOffZoneOBJ.zoneId !== "NIL" ? dropOffZoneOBJ.isExclusive : false;
-    dropOffZoneUnlockFare = pickUpZoneOBJ.zoneUnlockFare;
+    dropOffZoneUnlockFare = dropOffZoneOBJ.zoneUnlockFare;
 
     if((pickUpIsExclusive) && (pickUpZoneId !== dropOffZoneId))
     {
