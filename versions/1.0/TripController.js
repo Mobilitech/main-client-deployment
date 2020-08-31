@@ -163,7 +163,8 @@ exports.quickBook = function(userId,scooterId,stationId,userLat,userLng,userPaym
         "pickUpTime":bookingTime,
         "pickUpZoneId":_zoneObj.zoneId,
         "pickUpStationId":stationId,
-        "pickUpStationName":_stationObj.stationName
+        "pickUpStationName":_stationObj.stationName,
+        "etcFare":_zoneObj.zoneUnlockFare
       });
 
       var tempStatus = _previousTripObj.status === "TRIP_STARTED" ? "MULTI_TRIP_STARTED" :
@@ -217,7 +218,7 @@ exports.qrDocklessDropCheck = function(userId,userTripId,qrString,userLat,userLn
   var dropOffIsExclusive=false;
   var dropOffStationRadius = 400;
   var dropOffStationName = "NIL";
-
+  var dropOffZoneUnlockFare = 0;
   var pickUpZoneId;
   var pickUpZoneFare = 15;
   var pickUpZoneTimeBlock = 60;
@@ -341,7 +342,7 @@ exports.qrDocklessDropCheck = function(userId,userTripId,qrString,userLat,userLn
     {
       return dbController.getZoneOBJ(_accountGroup,_userDropOffStation.zoneId).then(function(_zoneObjRecv){
         var _zoneObjRecvTemp = new zoneModel();
-        Object.assign(_zoneObjRecvTemp,{"zoneId":_userDropOffStation.zoneId});
+        Object.assign(_zoneObjRecvTemp,_zoneObjRecv,{"zoneId":_userDropOffStation.zoneId});
         return _zoneObjRecvTemp;
       });
     }
@@ -353,6 +354,7 @@ exports.qrDocklessDropCheck = function(userId,userTripId,qrString,userLat,userLn
   }).then(function(dropOffZoneOBJ){
     dropOffZoneId = dropOffZoneOBJ.zoneId !== "NIL" ? dropOffZoneOBJ.zoneId : _userTripObj.pickUpZoneId;
     dropOffIsExclusive = dropOffZoneOBJ.zoneId !== "NIL" ? dropOffZoneOBJ.isExclusive : false;
+    dropOffZoneUnlockFare = dropOffZoneOBJ.zoneUnlockFare;
 
     if((pickUpIsExclusive) && (pickUpZoneId !== dropOffZoneId))
     {
@@ -396,6 +398,7 @@ exports.qrDocklessDropCheck = function(userId,userTripId,qrString,userLat,userLn
         [userId,userTripId,qrString,userLat,userLng,err]));
     });
   }).then(function(fareData){ //Pricing-matters fall in here
+    etcFare = dropOffZoneUnlockFare;
     totalFare = fareData.fareInCents + etcFare;
 
     var _commonCountry = _userObj.country === "NIL" ? "DEF" : _userObj.country;
