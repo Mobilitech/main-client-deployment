@@ -399,7 +399,13 @@ exports.qrDocklessDropCheck = function(userId,userTripId,qrString,userLat,userLn
     });
   }).then(function(fareData){ //Pricing-matters fall in here
     etcFare = dropOffZoneUnlockFare;
-    totalFare = fareData.fareInCents + etcFare;
+    if(totalTime < 60000){
+      totalFare = 0;
+    }
+    else {
+      totalFare = fareData.fareInCents + etcFare;
+
+    }
 
     var _commonCountry = _userObj.country === "NIL" ? "DEF" : _userObj.country;
     return commonRef.child(_commonCountry).once("value").then(function(_commonSnapshot){
