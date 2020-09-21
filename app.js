@@ -112,6 +112,7 @@ app.use(function(req, res, next) {
 //versiono 1.1 API
 // <LIST YOUR NEW APIs HERE>
 
+
 //version 1.0 API
 app.get('/v1.0/getAllStations',checkSessionToken,apiControllerV1_0.getAllStations);
 app.get('/v1.0/getOperatingZones',checkSessionToken,apiControllerV1_0.getOperatingZones);
