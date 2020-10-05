@@ -33,6 +33,7 @@ class Trip
     this.dropOffZoneTimeBlock = 0;
     this.isDropOffInOperatingZone = false;
     this.isDropOffInStation = false;
+    this.rebateAmount = 0;
   }
 };
 
