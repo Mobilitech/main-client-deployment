@@ -487,6 +487,7 @@ exports.qrDocklessDropCheck = function(userId,userTripId,qrString,userLat,userLn
           var query6 = query5.concat(newTripObj.dropOffZoneId + "'," + newTripObj.dropOffTime + "," + newTripObj.dropOffZoneFare + "," + newTripObj.dropOffZoneTimeBlock + ",'" + newTripObj.userId + "',");
           var query7 = query6.concat(newTripObj.rating + "," + newTripObj.feedback + ",'"+ newTripObj.scooterId +"')" );
 
+          console.log("MySQL Query Started");
           
         //  logger.logAPICall([],"/app.js/SqlUpdateCron@244",[query7],[]);
         conn.query( query7 , function(err,result){
