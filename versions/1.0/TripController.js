@@ -582,6 +582,7 @@ exports.qrDocklessDropCheck = function(userId,userTripId,qrString,userLat,userLn
               "dropOffStationName" : dropOffStationName,
               "dropOffZoneId" : dropOffZoneId,
               "dropOffTime": returnTime,
+              "rebateAmount" : rebateAmount
             });
             return dbController.setTripOBJ(userId,userTripId,_userTripObj,_accountGroup);
           }).then(function(){
@@ -614,6 +615,7 @@ exports.qrDocklessDropCheck = function(userId,userTripId,qrString,userLat,userLn
             "dropOffStationName" : dropOffStationName,
             "dropOffZoneId" : dropOffZoneId,
             "dropOffTime": returnTime,
+            "rebateAmount": rebateAmount
           });
           return dbController.setTripOBJ(userId,userTripId,_userTripObj,_accountGroup);
         }).then(function(){
