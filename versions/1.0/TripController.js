@@ -468,39 +468,8 @@ exports.qrDocklessDropCheck = function(userId,userTripId,qrString,userLat,userLn
           "dropOffTime": returnTime,
           "rebateAmount": rebateAmount
         });
-          var newTripObj = new tripModel();
-          console.log("User OBJ IS: " + _userTripObj.tripId);
-
-        Object.assign(newTripObj,_userTripObj.tripId,{"tripId":userTripId}, {"userId": userId})
-        userTransactionToReturn.push(newTripObj);
-        newTripObj.feedback = mysql.escape(newTripObj.feedback);
-
-        var insert_query = "INSERT INTO trips (ID, IMEI, passTransactionId, status,  isMultiTrip, paymentType, userLocationAtBookingLat, userLocationAtBookingLong, userLocationAtDropOffLat, ";
-        var insert_query2 = insert_query.concat("userLocationAtDropOffLong, pickUpStationId, pickUpStationName, pickUpZoneId, pickUpTime, pickUpZoneFare, pickUpZoneTimeBlock, totalFare, totalDuration, country, ");
-        var insert_query3 = insert_query2.concat("currency, etcFare, dropOffStationId, dropOffStationName, dropOffZoneId, dropOffTime, dropOffZoneFare, dropOffZoneTimeBlock, userId, rating, feedback, scooterId)");
-
         
-        var query = insert_query3.concat("VALUES ('"+ newTripObj.tripId + "','"+ newTripObj.IMEI +  "','" + newTripObj.passTransactionId +  "','" + newTripObj.status +  "',");  
-          var query2 = query.concat( newTripObj.isMultiTrip + ",'"+ newTripObj.paymentType + "'," + newTripObj.userLocationAtBooking[0] + "," +newTripObj.userLocationAtBooking[1] +"," );
-          var query3 = query2.concat(newTripObj.userLocationAtDropOff[0] + "," + newTripObj.userLocationAtDropOff[1] + ",'" + newTripObj.pickUpStationId + "','" + newTripObj.pickUpStationName + "','" + newTripObj.pickUpZoneId + "',");
-          var query4 = query3.concat(newTripObj.pickUpTime + "," + newTripObj.pickUpZoneFare + "," + newTripObj.pickUpZoneTimeBlock + "," + newTripObj.totalFare + "," + newTripObj.totalDuration + ",'");
-          var query5 = query4.concat(newTripObj.country + "','" + newTripObj.currency + "'," + newTripObj.etcFare + ",'" + newTripObj.dropOffStationId + "','" + newTripObj.dropOffStationName + "','");
-          var query6 = query5.concat(newTripObj.dropOffZoneId + "'," + newTripObj.dropOffTime + "," + newTripObj.dropOffZoneFare + "," + newTripObj.dropOffZoneTimeBlock + ",'" + newTripObj.userId + "',");
-          var query7 = query6.concat(newTripObj.rating + "," + newTripObj.feedback + ",'"+ newTripObj.scooterId +"')" );
-
-          console.log("MySQL Query Started");
-          
-        //  logger.logAPICall([],"/app.js/SqlUpdateCron@244",[query7],[]);
-        conn.query( query7 , function(err,result){
-            if (err) {
-             // logger.catchFunc2([],"ERROR","/app.js/SqlUpdateCron@286_QUERY :" + query7,[err],[],400,"https://ibb.co/k2zQzG");   
-          console.log("ERROR, QUERY: " + query7)
-            }
-              else{
-              //  logger.logAPICall([],"/v1.2/updateAllTrips@2455_COUNT:" + count,[],[]);
-                console.log("SUCCESS,  QUERY: " + query7)
-              } 
-              })
+       
 
         return dbController.setTripOBJ(userId,userTripId,_userTripObj,_accountGroup);
 
