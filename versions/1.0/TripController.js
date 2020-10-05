@@ -17,6 +17,11 @@ const commonModel = app_require('versions/1.0/Model/Common.js');
 const paymentMethodModel = app_require('versions/1.0/Model/PaymentMethod.js');
 const paymentIntentModel = app_require('versions/1.0/Model/PaymentIntent.js'); 
 
+// MySQL Imports 
+const conn = app_require('util/Sql.js');
+const mysql = require('mysql');
+// MySQL Imports
+
 var hardware = app_require('versions/1.0/AppHardwareController.js');
 var dbController = app_require('versions/1.0/DBController.js');
 
@@ -406,6 +411,12 @@ exports.qrDocklessDropCheck = function(userId,userTripId,qrString,userLat,userLn
       totalFare = fareData.fareInCents + etcFare;
 
     }
+    var rebateAmount = 0;
+    // Rebate matters
+    if (totalFare > 500){
+        rebateAmount = 0.1 * totalFare;
+    }
+    
 
     var _commonCountry = _userObj.country === "NIL" ? "DEF" : _userObj.country;
     return commonRef.child(_commonCountry).once("value").then(function(_commonSnapshot){
@@ -432,8 +443,9 @@ exports.qrDocklessDropCheck = function(userId,userTripId,qrString,userLat,userLn
         dbController.setStationOBJ(dropOffStationId,{"scooterAvail":++_userDropOffStation.scooterAvail},
         _accountGroup);
       }
+      
       Object.assign(_userObj,{
-        "credits": _userObj.credits - totalFare
+        "credits": _userObj.credits - totalFare + rebateAmount
       });
       dbController.setUserOBJ(userId,_userObj,_accountGroup).then(function(){
         Object.assign(_userTripObj,{
@@ -450,8 +462,43 @@ exports.qrDocklessDropCheck = function(userId,userTripId,qrString,userLat,userLn
           "dropOffStationName" : dropOffStationName,
           "dropOffZoneId" : dropOffZoneId,
           "dropOffTime": returnTime,
+          "rebateAmount": rebateAmount
         });
+
+        Object.assign(newTripObj,tripSnapShot.val(),{"tripId":userTripId}, {"userId": userId}, {"count": count})
+        userTransactionToReturn.push(newTripObj);
+        newTripObj.feedback = mysql.escape(newTripObj.feedback);
+
+        var insert_query = "INSERT INTO trips (ID, IMEI, passTransactionId, status,  isMultiTrip, paymentType, userLocationAtBookingLat, userLocationAtBookingLong, userLocationAtDropOffLat, ";
+        var insert_query2 = insert_query.concat("userLocationAtDropOffLong, pickUpStationId, pickUpStationName, pickUpZoneId, pickUpTime, pickUpZoneFare, pickUpZoneTimeBlock, totalFare, totalDuration, country, ");
+        var insert_query3 = insert_query2.concat("currency, etcFare, dropOffStationId, dropOffStationName, dropOffZoneId, dropOffTime, dropOffZoneFare, dropOffZoneTimeBlock, userId, rating, feedback, scooterId)");
+
+        
+        var query = insert_query3.concat("VALUES ('"+ newTripObj.tripId + "','"+ newTripObj.IMEI +  "','" + newTripObj.passTransactionId +  "','" + newTripObj.status +  "',");  
+          var query2 = query.concat( newTripObj.isMultiTrip + ",'"+ newTripObj.paymentType + "'," + newTripObj.userLocationAtBooking[0] + "," +newTripObj.userLocationAtBooking[1] +"," );
+          var query3 = query2.concat(newTripObj.userLocationAtDropOff[0] + "," + newTripObj.userLocationAtDropOff[1] + ",'" + newTripObj.pickUpStationId + "','" + newTripObj.pickUpStationName + "','" + newTripObj.pickUpZoneId + "',");
+          var query4 = query3.concat(newTripObj.pickUpTime + "," + newTripObj.pickUpZoneFare + "," + newTripObj.pickUpZoneTimeBlock + "," + newTripObj.totalFare + "," + newTripObj.totalDuration + ",'");
+          var query5 = query4.concat(newTripObj.country + "','" + newTripObj.currency + "'," + newTripObj.etcFare + ",'" + newTripObj.dropOffStationId + "','" + newTripObj.dropOffStationName + "','");
+          var query6 = query5.concat(newTripObj.dropOffZoneId + "'," + newTripObj.dropOffTime + "," + newTripObj.dropOffZoneFare + "," + newTripObj.dropOffZoneTimeBlock + ",'" + newTripObj.userId + "',");
+          var query7 = query6.concat(newTripObj.rating + "," + newTripObj.feedback + ",'"+ newTripObj.scooterId +"')" );
+
+        //  logger.logAPICall([],"/app.js/SqlUpdateCron@244",[query7],[]);
+        conn.query( query7 , function(err,result){
+            if (err) {
+             // logger.catchFunc2([],"ERROR","/app.js/SqlUpdateCron@286_QUERY :" + query7,[err],[],400,"https://ibb.co/k2zQzG");   
+          console.log("ERROR, QUERY: " + query7)
+            }
+              else{
+              //  logger.logAPICall([],"/v1.2/updateAllTrips@2455_COUNT:" + count,[],[]);
+                console.log("SUCCESS,  QUERY: " + query7)
+              } 
+              })
+
         return dbController.setTripOBJ(userId,userTripId,_userTripObj,_accountGroup);
+
+        // Update/ Insert SQL Row into MySQL Database
+          
+
       }).then(function(){
         deferred.resolve({"status":"OK","tripStatus":"DROPOFF_COMPLETION"});
       });
@@ -490,8 +537,9 @@ exports.qrDocklessDropCheck = function(userId,userTripId,qrString,userLat,userLn
           }
         }).then(function(_paymentMethod){
           Object.assign(_userPaymentMethod,_paymentMethod);
+       
           Object.assign(_userObj,{
-            "credits" : parseInt(0),
+            "credits" : parseInt(0) + rebateAmount,
             "creditCardToken":_userPaymentIntent.payment_method,
             "creditCardType":_paymentMethod.card.brand === "NIL" ? _userObj.creditCardType : _paymentMethod.card.brand,
             "creditCardNumber":_paymentMethod.card.last4 === "NIL" ? _userObj.saveCreditCard : _paymentMethod.card.last4,
@@ -537,7 +585,7 @@ exports.qrDocklessDropCheck = function(userId,userTripId,qrString,userLat,userLn
             _accountGroup);
           }
           Object.assign(_userObj,{
-            "credits": _userObj.credits - totalFare
+            "credits": _userObj.credits - totalFare + rebateAmount
           });
           dbController.setUserOBJ(userId,_userObj,_accountGroup).then(function(){
             Object.assign(_userTripObj,{
