@@ -484,7 +484,7 @@ exports.qrDocklessDropCheck = function(userId,userTripId,qrString,userLat,userLn
     else
     {
       stripe = require("stripe")(_commonObj.stripeSecretKey);
-      var _totalFareLeft = _userObj.credits - totalFare;
+      var _totalFareLeft = _userObj.credits - totalFare + rebateAmount;
       if(_totalFareLeft < 0) // call stripe......
       {
         stripe.paymentIntents.create({
@@ -598,7 +598,7 @@ exports.qrDocklessDropCheck = function(userId,userTripId,qrString,userLat,userLn
           _accountGroup);
         }
         Object.assign(_userObj,{
-          "credits": _userObj.credits - totalFare
+          "credits": _userObj.credits - totalFare + rebateAmount
         });
         dbController.setUserOBJ(userId,_userObj,_accountGroup).then(function(){
           Object.assign(_userTripObj,{
