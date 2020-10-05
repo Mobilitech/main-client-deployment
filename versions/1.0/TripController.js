@@ -18,8 +18,8 @@ const paymentMethodModel = app_require('versions/1.0/Model/PaymentMethod.js');
 const paymentIntentModel = app_require('versions/1.0/Model/PaymentIntent.js'); 
 
 // MySQL Imports 
-const conn = app_require('util/Sql.js');
-const mysql = require('mysql');
+//const conn = app_require('util/Sql.js');
+//const mysql = require('mysql');
 // MySQL Imports
 
 var hardware = app_require('versions/1.0/AppHardwareController.js');
