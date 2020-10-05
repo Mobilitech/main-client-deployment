@@ -466,7 +466,7 @@ exports.qrDocklessDropCheck = function(userId,userTripId,qrString,userLat,userLn
           "rebateAmount": rebateAmount
         });
 
-        Object.assign(newTripObj,tripSnapShot.val(),{"tripId":userTripId}, {"userId": userId}, {"count": count})
+        Object.assign(newTripObj,_userTripObj.val(),{"tripId":userTripId}, {"userId": userId}, {"count": count})
         userTransactionToReturn.push(newTripObj);
         newTripObj.feedback = mysql.escape(newTripObj.feedback);
 
