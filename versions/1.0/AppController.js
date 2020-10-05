@@ -419,6 +419,7 @@ exports.qrDocklessDropCheck = function(req,res)
       logger.catchFunc2(ip,"ERROR","/1.0/qrDocklessDropCheck@359","Drop Off Error\n[QRDDC1_8_394]",
         "There seems to be a problem in processing your request. Please try again!",
         res,400,"https://ibb.co/k2zQzG");
+        console.log("ERROR@QrDocklessDropOffCheck : " + err);
     }
   });
 }
