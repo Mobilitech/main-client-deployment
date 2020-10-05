@@ -411,12 +411,12 @@ exports.qrDocklessDropCheck = function(userId,userTripId,qrString,userLat,userLn
       totalFare = fareData.fareInCents + etcFare;
 
     }
-    var rebateAmount = 0;
+
     // Rebate matters
     if (totalFare > 500){
         rebateAmount = 0.1 * totalFare;
     }
-    
+    console.log("Rebate Amount is : " + rebateAmount + "@419");
 
     var _commonCountry = _userObj.country === "NIL" ? "DEF" : _userObj.country;
     return commonRef.child(_commonCountry).once("value").then(function(_commonSnapshot){
@@ -482,6 +482,7 @@ exports.qrDocklessDropCheck = function(userId,userTripId,qrString,userLat,userLn
           var query6 = query5.concat(newTripObj.dropOffZoneId + "'," + newTripObj.dropOffTime + "," + newTripObj.dropOffZoneFare + "," + newTripObj.dropOffZoneTimeBlock + ",'" + newTripObj.userId + "',");
           var query7 = query6.concat(newTripObj.rating + "," + newTripObj.feedback + ",'"+ newTripObj.scooterId +"')" );
 
+          
         //  logger.logAPICall([],"/app.js/SqlUpdateCron@244",[query7],[]);
         conn.query( query7 , function(err,result){
             if (err) {
