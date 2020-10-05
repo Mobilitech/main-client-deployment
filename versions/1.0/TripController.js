@@ -406,7 +406,7 @@ exports.qrDocklessDropCheck = function(userId,userTripId,qrString,userLat,userLn
     etcFare = dropOffZoneUnlockFare;
     if(totalTime < 60000){
       totalFare = 0;
-     // totalFare = fareData.fareInCents + etcFare;
+      totalFare = fareData.fareInCents + etcFare;
       // REMOVE LATER
     }
     else {
