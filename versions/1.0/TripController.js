@@ -447,7 +447,7 @@ exports.qrDocklessDropCheck = function(userId,userTripId,qrString,userLat,userLn
         dbController.setStationOBJ(dropOffStationId,{"scooterAvail":++_userDropOffStation.scooterAvail},
         _accountGroup);
       }
-      
+      console.log("Rebate Amount is : " + rebateAmount + "@450");
       Object.assign(_userObj,{
         "credits": _userObj.credits - totalFare + rebateAmount
       });
