@@ -468,6 +468,7 @@ exports.qrDocklessDropCheck = function(userId,userTripId,qrString,userLat,userLn
           "dropOffTime": returnTime,
           "rebateAmount": rebateAmount
         });
+          var newTripObj = new TripModel();
 
         Object.assign(newTripObj,_userTripObj.val(),{"tripId":userTripId}, {"userId": userId}, {"count": count})
         userTransactionToReturn.push(newTripObj);
