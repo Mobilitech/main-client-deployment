@@ -469,7 +469,7 @@ exports.qrDocklessDropCheck = function(userId,userTripId,qrString,userLat,userLn
           "rebateAmount": rebateAmount
         });
         
-       
+        console.log("Rebate Amount is : " + rebateAmount + "@472");
 
         return dbController.setTripOBJ(userId,userTripId,_userTripObj,_accountGroup);
 
@@ -514,7 +514,7 @@ exports.qrDocklessDropCheck = function(userId,userTripId,qrString,userLat,userLn
           }
         }).then(function(_paymentMethod){
           Object.assign(_userPaymentMethod,_paymentMethod);
-       
+          console.log("Rebate Amount is : " + rebateAmount + "@517");
           Object.assign(_userObj,{
             "credits" : parseInt(0) + rebateAmount,
             "creditCardToken":_userPaymentIntent.payment_method,
@@ -561,6 +561,7 @@ exports.qrDocklessDropCheck = function(userId,userTripId,qrString,userLat,userLn
             dbController.setStationOBJ(dropOffStationId,{"scooterAvail":++_userDropOffStation.scooterAvail},
             _accountGroup);
           }
+          console.log("Rebate Amount is : " + rebateAmount + "@564");
           Object.assign(_userObj,{
             "credits": _userObj.credits - totalFare + rebateAmount
           });
