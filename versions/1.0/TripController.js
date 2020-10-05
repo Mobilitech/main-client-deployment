@@ -477,6 +477,7 @@ exports.qrDocklessDropCheck = function(userId,userTripId,qrString,userLat,userLn
           
 
       }).then(function(){
+        console.log("Rebate Amount is : " + rebateAmount + "@480");
         deferred.resolve({"status":"OK","tripStatus":"DROPOFF_COMPLETION"});
       });
     }
