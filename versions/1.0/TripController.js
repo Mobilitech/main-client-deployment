@@ -417,7 +417,7 @@ exports.qrDocklessDropCheck = function(userId,userTripId,qrString,userLat,userLn
 
     // Rebate matters
     rebateAmount = 0;
-    if (totalFare > 0){
+    if (totalFare > 500){
         rebateAmount = 0.1 * totalFare;
     }
     console.log("Rebate Amount is : " + rebateAmount + "@419");
